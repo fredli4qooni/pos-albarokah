@@ -15,6 +15,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 use App\Http\Controllers\ReceivableController;
+use App\Http\Controllers\RestockController;
 use App\Http\Controllers\SaleController;
 
 Route::middleware('auth')->group(function () {
@@ -38,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/receivables/{receivable}', [ReceivableController::class, 'show'])->name('receivables.show');
     Route::post('/receivables/{receivable}/payments', [ReceivableController::class, 'storePayment'])->name('receivables.payments.store');
     Route::get('/receivables/{receivable}/payments/{payment}/print', [ReceivableController::class, 'printPaymentReceipt'])->name('receivables.payments.print');
+
+    // Restock Barang Masuk (Penerimaan Pasokan)
+    Route::resource('restocks', RestockController::class)->only(['index', 'create', 'store', 'show']);
 });
 
 require __DIR__.'/auth.php';
