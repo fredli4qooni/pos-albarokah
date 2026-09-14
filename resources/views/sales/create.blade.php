@@ -14,19 +14,19 @@
          @keydown.window.f2.prevent="focusSearch()">
 
         <!-- Top Header & Shortcuts Info -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-slate-900 text-white p-4 sm:p-5 rounded-2xl shadow-xl border border-slate-800">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white text-slate-800 p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+                <div class="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-lg sm:text-xl font-black tracking-tight text-white flex items-center gap-2">
+                    <h2 class="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
                         <span>Terminal Kasir POS</span>
-                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold font-mono" x-text="suggestedInvoiceNo"></span>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold font-mono" x-text="suggestedInvoiceNo"></span>
                     </h2>
-                    <p class="text-xs text-slate-400">Kasir: <span class="text-white font-medium">{{ Auth::user()->name }}</span> • Tanggal: <span class="text-slate-300 font-mono">{{ now()->format('d/m/Y') }}</span></p>
+                    <p class="text-xs text-slate-500">Kasir: <span class="text-slate-800 font-semibold">{{ Auth::user()->name }}</span> • Tanggal: <span class="text-slate-700 font-mono font-semibold">{{ now()->format('d/m/Y') }}</span></p>
                 </div>
             </div>
 
@@ -34,16 +34,16 @@
             <div class="flex flex-wrap items-center gap-2">
                 <button @click="openScannerModal()" 
                         type="button" 
-                        class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs font-bold rounded-xl shadow-md transition transform active:scale-95">
+                        class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition active:scale-95">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
                     </svg>
                     <span>Scan Barcode Kamera</span>
                 </button>
-                <div class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-slate-800/80 rounded-xl border border-slate-700/60 text-[11px] text-slate-300">
-                    <span class="font-mono bg-slate-700 px-1.5 py-0.5 rounded text-white font-bold">F2</span> Cari Barang
-                    <span class="text-slate-500 mx-1">•</span>
-                    <span class="font-mono bg-slate-700 px-1.5 py-0.5 rounded text-white font-bold">F9</span> Selesaikan
+                <div class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-slate-100 rounded-xl border border-slate-200 text-[11px] text-slate-600">
+                    <span class="font-mono bg-white border border-slate-300 px-1.5 py-0.5 rounded text-slate-800 font-bold">F2</span> Cari Barang
+                    <span class="text-slate-400 mx-1">•</span>
+                    <span class="font-mono bg-white border border-slate-300 px-1.5 py-0.5 rounded text-slate-800 font-bold">F9</span> Selesaikan
                 </div>
             </div>
         </div>
@@ -290,17 +290,17 @@
                 </div>
 
                 <!-- Cart Total Summary & Checkout Button -->
-                <div class="p-4 bg-slate-900 text-white space-y-3">
+                <div class="p-4 bg-slate-50 border-t border-slate-200 rounded-b-2xl space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Pembayaran</span>
-                        <span class="text-2xl font-black text-emerald-400 font-mono tracking-tight" x-text="formatRupiah(totalCart)"></span>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pembayaran</span>
+                        <span class="text-2xl font-black text-slate-900 font-mono tracking-tight" x-text="formatRupiah(totalCart)"></span>
                     </div>
 
                     <button @click="submitSale()" 
                             :disabled="cart.length === 0 || isSubmitting || (paymentMethod === 'cash' && change < 0)"
                             :class="{
-                                'opacity-50 cursor-not-allowed bg-slate-700': cart.length === 0 || isSubmitting || (paymentMethod === 'cash' && change < 0),
-                                'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 active:scale-98 shadow-lg shadow-emerald-500/20': cart.length > 0 && !isSubmitting && (paymentMethod === 'credit' || change >= 0)
+                                'opacity-50 cursor-not-allowed bg-slate-300 text-slate-600': cart.length === 0 || isSubmitting || (paymentMethod === 'cash' && change < 0),
+                                'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm active:scale-98': cart.length > 0 && !isSubmitting && (paymentMethod === 'credit' || change >= 0)
                             }"
                             type="button" 
                             class="w-full py-3.5 px-4 text-white text-sm font-extrabold rounded-xl transition duration-150 flex items-center justify-center gap-2">
@@ -326,17 +326,17 @@
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
 
                 <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-slate-200">
-                    <div class="p-5 bg-slate-900 text-white flex items-center justify-between">
+                    <div class="p-5 bg-white border-b border-slate-200 text-slate-900 flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold text-white">Scanner Barcode Kamera</h3>
-                                <p class="text-[11px] text-slate-400">Arahkan kamera ke barcode kemasan produk</p>
+                                <h3 class="text-sm font-bold text-slate-900">Scanner Barcode Kamera</h3>
+                                <p class="text-[11px] text-slate-500">Arahkan kamera ke barcode kemasan produk</p>
                             </div>
                         </div>
-                        <button @click="closeScannerModal()" type="button" class="text-slate-400 hover:text-white p-1">
+                        <button @click="closeScannerModal()" type="button" class="text-slate-400 hover:text-slate-700 p-1">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
@@ -443,7 +443,7 @@
                         <div class="grid grid-cols-2 gap-2">
                             <a :href="lastSaleResult?.print_url" 
                                target="_blank" 
-                               class="w-full py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                               class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                                 <span>Cetak Struk</span>
                             </a>

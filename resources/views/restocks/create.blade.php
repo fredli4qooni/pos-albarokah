@@ -67,18 +67,18 @@
                 <!-- Live Stock Projection Card -->
                 <div x-show="currentProduct" 
                      x-transition 
-                     class="p-4 bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl shadow-md grid grid-cols-3 gap-4 text-center">
+                     class="p-4 bg-slate-50 border border-slate-200 rounded-2xl shadow-sm grid grid-cols-3 gap-4 text-center">
                     <div>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Stok Saat Ini</span>
-                        <span class="text-lg font-black font-mono mt-0.5 block text-slate-200" x-text="currentStock + ' ' + (currentProduct?.unit || '')"></span>
+                        <span class="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">Stok Saat Ini</span>
+                        <span class="text-lg font-black font-mono mt-0.5 block text-slate-700" x-text="currentStock + ' ' + (currentProduct?.unit || '')"></span>
                     </div>
-                    <div class="border-x border-slate-700/80 px-2">
-                        <span class="text-[10px] text-emerald-400 uppercase tracking-wider block">+ Barang Masuk</span>
-                        <span class="text-lg font-black font-mono mt-0.5 block text-emerald-400" x-text="'+' + (quantity || 0) + ' ' + (currentProduct?.unit || '')"></span>
+                    <div class="border-x border-slate-200 px-2">
+                        <span class="text-[10px] text-emerald-700 uppercase tracking-wider block font-bold">+ Barang Masuk</span>
+                        <span class="text-lg font-black font-mono mt-0.5 block text-emerald-700" x-text="'+' + (quantity || 0) + ' ' + (currentProduct?.unit || '')"></span>
                     </div>
                     <div>
-                        <span class="text-[10px] text-teal-300 uppercase tracking-wider block">Estimasi Stok Baru</span>
-                        <span class="text-xl font-black font-mono mt-0.5 block text-teal-300" x-text="projectedStock + ' ' + (currentProduct?.unit || '')"></span>
+                        <span class="text-[10px] text-teal-700 uppercase tracking-wider block font-bold">Estimasi Stok Baru</span>
+                        <span class="text-xl font-black font-mono mt-0.5 block text-teal-700" x-text="projectedStock + ' ' + (currentProduct?.unit || '')"></span>
                     </div>
                 </div>
 
@@ -145,8 +145,8 @@
                     </a>
                     <button type="submit" 
                             :disabled="!selectedId || quantity <= 0"
-                            class="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
-                        Simpan Penerimaan Pasokan
+                            class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span>Konfirmasi & Simpan Stok Masuk</span>
                     </button>
                 </div>
 

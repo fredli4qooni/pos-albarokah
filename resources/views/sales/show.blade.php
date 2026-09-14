@@ -16,7 +16,7 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <a href="{{ route('sales.print', $sale) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-md transition">
+                <a href="{{ route('sales.print', $sale) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                     <span>Cetak Struk Thermal</span>
                 </a>
@@ -31,28 +31,28 @@
         <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
             
             <!-- Store & Invoice Header -->
-            <div class="p-6 sm:p-8 bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div class="p-6 sm:p-8 bg-white border-b border-slate-200 text-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                 <div>
                     <div class="flex items-center gap-2.5 mb-1">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white font-bold">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
-                        <h1 class="text-xl font-black tracking-tight">TOKO PERTANIAN AL BAROKAH</h1>
+                        <h1 class="text-xl font-black tracking-tight text-slate-900">TOKO PERTANIAN AL BAROKAH</h1>
                     </div>
-                    <p class="text-xs text-slate-400">Pusat Obat Pertanian, Pupuk, Benih & Alat Saprotan</p>
-                    <p class="text-xs text-slate-400">Jl. Raya Pertanian No. 12, Desa Sumber Makmur</p>
+                    <p class="text-xs text-slate-500">Pusat Obat Pertanian, Pupuk, Benih & Alat Saprotan</p>
+                    <p class="text-xs text-slate-500">Jl. Raya Pertanian No. 12, Desa Sumber Makmur</p>
                 </div>
 
                 <div class="sm:text-right space-y-1">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Faktur Penjualan</span>
-                    <span class="text-2xl font-black text-emerald-400 font-mono">{{ $sale->invoice_no }}</span>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Faktur Penjualan</span>
+                    <span class="text-2xl font-black text-slate-900 font-mono">{{ $sale->invoice_no }}</span>
                     <div class="pt-1">
                         @if($sale->payment_method === 'cash')
-                            <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                 LUNAS • TUNAI
                             </span>
                         @else
-                            <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
                                 KREDIT (PIUTANG PETANI)
                             </span>
                         @endif

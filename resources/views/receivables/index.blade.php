@@ -36,9 +36,9 @@
                 <p class="text-xs text-slate-500">Monitoring saldo hak tagih penjualan saprotan kredit dan riwayat pembayaran cicilan</p>
             </div>
             <div class="flex items-center gap-2">
-                <a href="{{ route('sales.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-md transition">
+                <a href="{{ route('sales.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span>Penjualan Kredit Baru</span>
+                    <span>+ Transaksi Kredit Baru</span>
                 </a>
             </div>
         </div>
@@ -122,8 +122,8 @@
 
                 <!-- Actions -->
                 <div class="flex items-end gap-2">
-                    <button type="submit" class="flex-1 py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition">
-                        Terapkan Filter
+                    <button type="submit" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
+                        Filter
                     </button>
                     @if(request()->anyFilled(['search', 'status', 'customer_id']))
                         <a href="{{ route('receivables.index') }}" class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition" title="Reset Filter">
@@ -137,7 +137,7 @@
             <div class="flex items-center gap-2 pt-1 border-t border-slate-100">
                 <span class="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Pilih Cepat:</span>
                 <a href="{{ route('receivables.index') }}" 
-                   class="px-2.5 py-1 rounded-lg text-xs font-semibold {{ !request('status') ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                   class="px-2.5 py-1 rounded-lg text-xs font-semibold {{ !request('status') ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
                     Semua
                 </a>
                 <a href="{{ route('receivables.index', ['status' => 'belum_lunas']) }}" 
@@ -252,7 +252,7 @@
                                                         action_url: '{{ route('receivables.payments.store', $item) }}'
                                                     })"
                                                     type="button" 
-                                                    class="px-2.5 py-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-lg text-[11px] shadow-sm transition">
+                                                    class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] shadow-sm transition">
                                                 Bayar Cicilan
                                             </button>
                                         @endif
@@ -299,17 +299,17 @@
 
                 <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-slate-200">
                     
-                    <div class="p-5 bg-slate-900 text-white flex items-center justify-between">
+                    <div class="p-5 bg-white border-b border-slate-200 text-slate-900 flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center font-bold">
                                 Rp
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold text-white">Catat Pembayaran Piutang</h3>
-                                <p class="text-[11px] text-slate-400" x-text="'Nota: ' + activeReceivable?.invoice_no"></p>
+                                <h3 class="text-sm font-bold text-slate-900">Catat Pembayaran Piutang</h3>
+                                <p class="text-[11px] text-slate-500 font-mono" x-text="'Nota: ' + activeReceivable?.invoice_no"></p>
                             </div>
                         </div>
-                        <button @click="paymentModalOpen = false" type="button" class="text-slate-400 hover:text-white p-1">
+                        <button @click="paymentModalOpen = false" type="button" class="text-slate-400 hover:text-slate-700 p-1">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
