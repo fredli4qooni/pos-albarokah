@@ -14,6 +14,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+use App\Http\Controllers\ReceivableController;
 use App\Http\Controllers\SaleController;
 
 Route::middleware('auth')->group(function () {
@@ -31,6 +32,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/sales/{sale}/print', [SaleController::class, 'printReceipt'])->name('sales.print');
     Route::get('/sales/{sale}/download-pdf', [SaleController::class, 'downloadPdf'])->name('sales.download-pdf');
     Route::resource('sales', SaleController::class)->only(['index', 'create', 'store', 'show']);
+
+    // Piutang Pelanggan Petani
+    Route::get('/receivables', [ReceivableController::class, 'index'])->name('receivables.index');
+    Route::get('/receivables/{receivable}', [ReceivableController::class, 'show'])->name('receivables.show');
+    Route::post('/receivables/{receivable}/payments', [ReceivableController::class, 'storePayment'])->name('receivables.payments.store');
+    Route::get('/receivables/{receivable}/payments/{payment}/print', [ReceivableController::class, 'printPaymentReceipt'])->name('receivables.payments.print');
 });
 
 require __DIR__.'/auth.php';
