@@ -13,6 +13,7 @@ Route::get('/', function () {
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\ReceivableController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RestockController;
 use App\Http\Controllers\SaleController;
 
@@ -50,6 +51,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/forecast', [ForecastController::class, 'index'])->name('forecast.index');
     Route::post('/forecast/calculate', [ForecastController::class, 'calculate'])->name('forecast.calculate');
     Route::get('/forecast/{product}/history', [ForecastController::class, 'history'])->name('forecast.history');
+
+    // Modul Laporan & Cetak PDF (DomPDF)
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::get('/sales', [ReportController::class, 'sales'])->name('sales');
+        Route::get('/sales/pdf', [ReportController::class, 'salesPdf'])->name('sales.pdf');
+        Route::get('/receivables', [ReportController::class, 'receivables'])->name('receivables');
+        Route::get('/receivables/pdf', [ReportController::class, 'receivablesPdf'])->name('receivables.pdf');
+        Route::get('/products', [ReportController::class, 'products'])->name('products');
+        Route::get('/products/pdf', [ReportController::class, 'productsPdf'])->name('products.pdf');
+    });
 });
 
 require __DIR__.'/auth.php';
