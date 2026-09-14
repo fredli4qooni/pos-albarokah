@@ -14,6 +14,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+use App\Http\Controllers\SaleController;
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -24,6 +26,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/{product}/barcode', [ProductController::class, 'barcode'])->name('products.barcode');
     Route::resource('products', ProductController::class);
     Route::resource('customers', CustomerController::class);
+
+    // POS Kasir & Transaksi Penjualan
+    Route::get('/sales/{sale}/print', [SaleController::class, 'printReceipt'])->name('sales.print');
+    Route::get('/sales/{sale}/download-pdf', [SaleController::class, 'downloadPdf'])->name('sales.download-pdf');
+    Route::resource('sales', SaleController::class)->only(['index', 'create', 'store', 'show']);
 });
 
 require __DIR__.'/auth.php';
