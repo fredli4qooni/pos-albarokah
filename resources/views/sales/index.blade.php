@@ -10,7 +10,7 @@
                 <p class="text-xs text-slate-500">Semua catatan transaksi kasir tunai dan kredit piutang toko</p>
             </div>
             <div>
-                <a href="{{ route('sales.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition transform hover:-translate-y-0.5">
+                <a href="{{ route('sales.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     <span>Buka Terminal Kasir (POS)</span>
                 </a>
@@ -105,7 +105,7 @@
 
                 <!-- Action Filter -->
                 <div class="flex items-end gap-2">
-                    <button type="submit" class="flex-1 py-2 px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition">
+                    <button type="submit" class="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
                         Filter
                     </button>
                     @if(request()->anyFilled(['search', 'payment_method', 'start_date', 'end_date']))

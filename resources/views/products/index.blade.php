@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <button type="submit" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs rounded-xl transition">
+                    <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl transition shadow-sm">
                         Filter
                     </button>
                     @if($search || $categoryId || $stockStatus)

@@ -27,30 +27,30 @@
         <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
             
             <!-- Banner Header -->
-            <div class="p-6 sm:p-8 bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div class="p-6 sm:p-8 bg-white border-b border-slate-200 text-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                 <div>
-                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider block">Pelanggan Petani</span>
-                    <h1 class="text-2xl font-black tracking-tight">{{ $receivable->customer->name ?? '-' }}</h1>
-                    <div class="mt-2 space-y-0.5 text-xs text-slate-400">
+                    <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider block">Pelanggan Petani</span>
+                    <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $receivable->customer->name ?? '-' }}</h1>
+                    <div class="mt-2 space-y-0.5 text-xs text-slate-600">
                         @if($receivable->customer && $receivable->customer->phone)
-                            <p>No. HP / WhatsApp: <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $receivable->customer->phone) }}" target="_blank" class="text-white hover:text-emerald-300 underline font-mono">{{ $receivable->customer->phone }}</a></p>
+                            <p>No. HP / WhatsApp: <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $receivable->customer->phone) }}" target="_blank" class="text-emerald-700 hover:text-emerald-800 underline font-mono font-bold">{{ $receivable->customer->phone }}</a></p>
                         @endif
-                        <p>Alamat: {{ $receivable->customer->address ?? '-' }}</p>
+                        <p class="text-slate-500">Alamat: {{ $receivable->customer->address ?? '-' }}</p>
                     </div>
                 </div>
 
                 <div class="sm:text-right space-y-1">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Status Pelunasan</span>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Status Pelunasan</span>
                     @if($receivable->status === 'lunas')
-                        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-extrabold bg-emerald-500 text-white shadow-lg shadow-emerald-500/20">
+                        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                             SUDAH LUNAS
                         </span>
                     @else
-                        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-extrabold bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20">
+                        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
                             BELUM LUNAS
                         </span>
                     @endif
-                    <p class="text-[11px] text-slate-400 mt-1">Tanggal Transaksi: {{ $receivable->created_at->format('d/m/Y H:i') }}</p>
+                    <p class="text-[11px] text-slate-500 mt-1">Tanggal Transaksi: {{ $receivable->created_at->format('d/m/Y H:i') }}</p>
                 </div>
             </div>
 
@@ -152,7 +152,7 @@
                         </div>
 
                         <div class="flex justify-end pt-2">
-                            <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl shadow-md transition">
+                            <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
                                 Simpan Pembayaran
                             </button>
                         </div>

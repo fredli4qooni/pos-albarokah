@@ -32,22 +32,22 @@
 
         <!-- Sidebar Navigation -->
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-               class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 border-r border-slate-800 shadow-xl">
+               class="fixed inset-y-0 left-0 z-50 w-72 bg-white text-slate-700 flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 border-r border-slate-200 shadow-sm">
             
             <!-- Brand Logo -->
-            <div class="h-20 flex items-center justify-between px-6 border-b border-slate-800/80 bg-slate-950/40">
+            <div class="h-20 flex items-center justify-between px-6 border-b border-slate-200 bg-white">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                         </svg>
                     </div>
                     <div>
-                        <span class="block text-base font-extrabold tracking-tight text-white">AL BAROKAH</span>
-                        <span class="block text-[10px] font-semibold uppercase tracking-wider text-emerald-400">Toko Pertanian</span>
+                        <span class="block text-base font-extrabold tracking-tight text-slate-900">AL BAROKAH</span>
+                        <span class="block text-[10px] font-bold uppercase tracking-wider text-emerald-600">Toko Pertanian</span>
                     </div>
                 </a>
-                <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-white p-1">
+                <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-slate-700 p-1">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
@@ -55,7 +55,7 @@
             <!-- Quick Action: Kasir POS -->
             <div class="p-4">
                 <a href="{{ Route::has('sales.create') ? route('sales.create') : url('/sales/create') }}" 
-                   class="w-full flex items-center justify-center gap-2.5 px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition duration-150 transform hover:-translate-y-0.5">
+                   class="w-full flex items-center justify-center gap-2.5 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-sm transition duration-150">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
@@ -71,8 +71,8 @@
                     <span class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Menu Utama</span>
                     <div class="mt-2 space-y-1">
                         <a href="{{ route('dashboard') }}" 
-                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('dashboard') ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                            <svg class="w-5 h-5 {{ request()->routeIs('dashboard') ? 'text-emerald-400' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('dashboard') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('dashboard') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                             </svg>
                             <span>Dashboard</span>
@@ -85,17 +85,17 @@
                     <span class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Penjualan & Piutang</span>
                     <div class="mt-2 space-y-1">
                         <a href="{{ Route::has('sales.index') ? route('sales.index') : url('/sales') }}" 
-                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('sales.*') ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                            <svg class="w-5 h-5 {{ request()->routeIs('sales.*') ? 'text-emerald-400' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('sales.*') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('sales.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
                             </svg>
                             <span>Riwayat Transaksi</span>
                         </a>
 
                         <a href="{{ Route::has('receivables.index') ? route('receivables.index') : url('/receivables') }}" 
-                           class="flex items-center justify-between px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('receivables.*') ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                           class="flex items-center justify-between px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('receivables.*') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             <div class="flex items-center gap-3">
-                                <svg class="w-5 h-5 {{ request()->routeIs('receivables.*') ? 'text-emerald-400' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 {{ request()->routeIs('receivables.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                                 </svg>
                                 <span>Piutang Petani</span>
@@ -109,24 +109,24 @@
                     <span class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Inventori & Restok</span>
                     <div class="mt-2 space-y-1">
                         <a href="{{ Route::has('products.index') ? route('products.index') : url('/products') }}" 
-                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('products.*') ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                            <svg class="w-5 h-5 {{ request()->routeIs('products.*') ? 'text-emerald-400' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('products.*') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('products.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                             </svg>
                             <span>Data Barang & Stok</span>
                         </a>
 
                         <a href="{{ Route::has('categories.index') ? route('categories.index') : url('/categories') }}" 
-                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('categories.*') ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                            <svg class="w-5 h-5 {{ request()->routeIs('categories.*') ? 'text-emerald-400' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('categories.*') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('categories.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
                             </svg>
                             <span>Kategori Barang</span>
                         </a>
 
                         <a href="{{ Route::has('restocks.index') ? route('restocks.index') : url('/restocks') }}" 
-                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('restocks.*') ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                            <svg class="w-5 h-5 {{ request()->routeIs('restocks.*') ? 'text-emerald-400' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('restocks.*') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('restocks.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                             </svg>
                             <span>Barang Masuk (Restock)</span>
@@ -139,14 +139,14 @@
                     <span class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Decision Support (DSS)</span>
                     <div class="mt-2 space-y-1">
                         <a href="{{ Route::has('forecast.index') ? route('forecast.index') : url('/forecast') }}" 
-                           class="flex items-center justify-between px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('forecast.*') ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                           class="flex items-center justify-between px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('forecast.*') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             <div class="flex items-center gap-3">
-                                <svg class="w-5 h-5 {{ request()->routeIs('forecast.*') ? 'text-emerald-400' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 {{ request()->routeIs('forecast.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                                 </svg>
                                 <span>Forecast Restok SMA</span>
                             </div>
-                            <span class="px-2 py-0.5 text-[10px] font-extrabold bg-teal-500/20 text-teal-300 rounded-md border border-teal-500/30">7 Hari</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-md border border-emerald-200">7 Hari</span>
                         </a>
                     </div>
                 </div>
@@ -156,16 +156,16 @@
                     <span class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Master & Laporan</span>
                     <div class="mt-2 space-y-1">
                         <a href="{{ Route::has('customers.index') ? route('customers.index') : url('/customers') }}" 
-                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('customers.*') ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                            <svg class="w-5 h-5 {{ request()->routeIs('customers.*') ? 'text-emerald-400' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('customers.*') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('customers.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                             <span>Data Pelanggan</span>
                         </a>
 
                         <a href="{{ Route::has('reports.index') ? route('reports.index') : url('/reports') }}" 
-                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('reports.*') ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                            <svg class="w-5 h-5 {{ request()->routeIs('reports.*') ? 'text-emerald-400' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           class="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('reports.*') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('reports.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
                             <span>Laporan (PDF)</span>
@@ -176,20 +176,20 @@
             </nav>
 
             <!-- Bottom User Card -->
-            <div class="p-4 border-t border-slate-800 bg-slate-950/60">
+            <div class="p-4 border-t border-slate-200 bg-slate-50">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-9 h-9 rounded-xl bg-emerald-700 text-white font-bold flex items-center justify-center flex-shrink-0">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-bold flex items-center justify-center flex-shrink-0">
                             {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                         </div>
                         <div class="min-w-0">
-                            <p class="text-sm font-semibold text-white truncate">{{ Auth::user()->name ?? 'Admin Toko' }}</p>
-                            <p class="text-xs text-slate-400 truncate">{{ Auth::user()->username ?? 'admin' }}</p>
+                            <p class="text-sm font-semibold text-slate-800 truncate">{{ Auth::user()->name ?? 'Admin Toko' }}</p>
+                            <p class="text-xs text-slate-500 truncate">{{ Auth::user()->username ?? 'admin' }}</p>
                         </div>
                     </div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" title="Keluar" class="text-slate-400 hover:text-rose-400 p-2 rounded-lg hover:bg-slate-800 transition">
+                        <button type="submit" title="Keluar" class="text-slate-400 hover:text-rose-600 p-2 rounded-lg hover:bg-slate-200/60 transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>

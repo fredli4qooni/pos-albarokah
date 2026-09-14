@@ -27,21 +27,21 @@
         <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
             
             <!-- Banner Header -->
-            <div class="p-6 sm:p-8 bg-slate-900 text-white flex items-center justify-between">
+            <div class="p-6 sm:p-8 bg-white border-b border-slate-200 text-slate-800 flex items-center justify-between">
                 <div>
-                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider block">Produk Pertanian</span>
-                    <h1 class="text-2xl font-black tracking-tight mt-0.5">{{ $restock->product->name ?? '-' }}</h1>
-                    <p class="text-xs text-slate-400 font-mono mt-1">
+                    <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider block">Produk Pertanian</span>
+                    <h1 class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">{{ $restock->product->name ?? '-' }}</h1>
+                    <p class="text-xs text-slate-500 font-mono mt-1">
                         SKU: {{ $restock->product->code ?? '-' }} • Kategori: {{ $restock->product->category->name ?? 'Pertanian' }}
                     </p>
                 </div>
 
                 <div class="text-right">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Kuantitas Masuk</span>
-                    <span class="text-3xl font-black text-emerald-400 font-mono mt-0.5 block">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">Kuantitas Masuk</span>
+                    <span class="text-3xl font-black text-emerald-600 font-mono mt-0.5 block">
                         +{{ number_format($restock->quantity, 0, ',', '.') }}
                     </span>
-                    <span class="text-xs font-bold text-slate-300">{{ $restock->product->unit ?? 'pcs' }}</span>
+                    <span class="text-xs font-bold text-slate-500">{{ $restock->product->unit ?? 'pcs' }}</span>
                 </div>
             </div>
 
