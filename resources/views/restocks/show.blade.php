@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('page_title', 'Detail Penerimaan Barang #' . $restock->id)
 
-    <div class="max-w-3xl mx-auto space-y-6">
+    <div class="space-y-6">
         
         <!-- Header Actions -->
         <div class="flex items-center justify-between">

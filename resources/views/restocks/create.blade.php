@@ -24,7 +24,7 @@
                 this.quantity = Math.max(1, current + delta);
             }
          }" 
-         class="max-w-3xl mx-auto space-y-6">
+         class="space-y-6">
 
         <!-- Header -->
         <div class="flex items-center justify-between">

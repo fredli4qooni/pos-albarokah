@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('page_title', 'Detail Faktur ' . $sale->invoice_no)
 
-    <div class="max-w-4xl mx-auto space-y-6">
+    <div class="space-y-6">
         
         <!-- Header Actions -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
