@@ -23,7 +23,7 @@
                 </div>
                 <div>
                     <h2 class="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
-                        <span>Terminal Kasir POS</span>
+                        <span>Kasir POS</span>
                         <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold font-mono" x-text="suggestedInvoiceNo"></span>
                     </h2>
                     <p class="text-xs text-slate-500">Kasir: <span class="text-slate-800 font-semibold">{{ Auth::user()->name }}</span> • Tanggal: <span class="text-slate-700 font-mono font-semibold">{{ now()->format('d/m/Y') }}</span></p>

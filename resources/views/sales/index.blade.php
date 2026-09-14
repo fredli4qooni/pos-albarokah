@@ -12,7 +12,7 @@
             <div>
                 <a href="{{ route('sales.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span>Buka Terminal Kasir (POS)</span>
+                    <span>Buka Kasir (POS)</span>
                 </a>
             </div>
         </div>
@@ -191,7 +191,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
                                     </svg>
                                     <p class="text-sm font-semibold text-slate-600">Belum ada catatan transaksi</p>
-                                    <p class="text-xs text-slate-400 mt-0.5">Buka terminal kasir untuk memulai penjualan.</p>
+                                    <p class="text-xs text-slate-400 mt-0.5">Buka kasir untuk memulai penjualan.</p>
                                 </td>
                             </tr>
                         @endforelse
