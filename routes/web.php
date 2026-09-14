@@ -14,6 +14,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\ReceivableController;
 use App\Http\Controllers\RestockController;
 use App\Http\Controllers\SaleController;
@@ -42,6 +43,11 @@ Route::middleware('auth')->group(function () {
 
     // Restock Barang Masuk (Penerimaan Pasokan)
     Route::resource('restocks', RestockController::class)->only(['index', 'create', 'store', 'show']);
+
+    // Forecast Restok SMA (Decision Support System)
+    Route::get('/forecast', [ForecastController::class, 'index'])->name('forecast.index');
+    Route::post('/forecast/calculate', [ForecastController::class, 'calculate'])->name('forecast.calculate');
+    Route::get('/forecast/{product}/history', [ForecastController::class, 'history'])->name('forecast.history');
 });
 
 require __DIR__.'/auth.php';
