@@ -49,11 +49,11 @@ jobs:
         DB_DATABASE: ':memory:'
       run: php artisan migrate --force
 
-    - name: 6. Automated tests
+    - name: 6. Build frontend assets (Tailwind CSS)
+      run: npm run build
+
+    - name: 7. Automated tests
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: ':memory:'
       run: php artisan test
-
-    - name: 7. Build frontend assets (Tailwind CSS)
-      run: npm run build
