@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  laravel-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1. Checkout repository
+      uses: actions/checkout@v4
+
+    - name: 1. Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_sqlite, sqlite3, bcmath, gd
+        coverage: none
+
+    - name: 1. Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: 2. Install Composer dependencies
+      run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+    - name: 2. Install NPM dependencies
+      run: npm ci
+
+    - name: 3. Lint / format check (Pint)
+      run: ./vendor/bin/pint --test
+
+    - name: 4. Static check & config validation
+      run: |
+        composer validate --strict
+        cp .env.example .env
+        php artisan key:generate
+        php artisan config:clear
+
+    - name: 5. Migration test (SQLite)
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: ':memory:'
+      run: php artisan migrate --force
+
+    - name: 6. Automated tests
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: ':memory:'
+      run: php artisan test
+
+    - name: 7. Build frontend assets (Tailwind CSS)
+      run: npm run build
