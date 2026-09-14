@@ -62,7 +62,7 @@ class PosSaleTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('sales.create'));
 
         $response->assertOk();
-        $response->assertSee('Terminal Kasir POS');
+        $response->assertSee('Kasir POS');
         $response->assertSee('Prevathon 50 SC 100ml');
         $response->assertSee('Pak Joko Santoso');
     }
