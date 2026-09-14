@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('page_title', 'Tambah Produk Baru')
 
-    <div class="max-w-4xl mx-auto space-y-6" 
+    <div class="space-y-6" 
          x-data="{
              purchasePrice: {{ old('purchase_price', 0) }},
              sellingPrice: {{ old('selling_price', 0) }},

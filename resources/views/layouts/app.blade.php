@@ -204,7 +204,7 @@
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             
             <!-- Top Navbar -->
-            <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10">
+            <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10">
                 <div class="flex items-center gap-4">
                     <button @click="sidebarOpen = true" class="lg:hidden text-slate-600 hover:text-slate-900 p-2 rounded-lg hover:bg-slate-100">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -262,7 +262,7 @@
             </header>
 
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+            <main class="flex-1 overflow-y-auto px-6 lg:px-8 py-6">
                 @if (isset($header))
                     <div class="mb-6">
                         {{ $header }}

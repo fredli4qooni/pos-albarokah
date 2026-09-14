@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('page_title', 'Edit Data Pelanggan: ' . $customer->name)
 
-    <div class="max-w-2xl mx-auto space-y-6">
+    <div class="space-y-6">
         
         <!-- Header -->
         <div>
