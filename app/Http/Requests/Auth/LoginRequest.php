@@ -35,6 +35,20 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Get custom error messages for validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'login.required_without' => 'Username atau email wajib diisi.',
+            'email.required_without' => 'Username atau email wajib diisi.',
+            'password.required' => 'Kata sandi wajib diisi.',
+        ];
+    }
+
+    /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws ValidationException
