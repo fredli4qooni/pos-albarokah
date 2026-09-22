@@ -140,13 +140,13 @@
                     <div class="mt-2 space-y-1">
                         <a href="{{ Route::has('forecast.index') ? route('forecast.index') : url('/forecast') }}" 
                            class="flex items-center justify-between px-3 py-2.5 text-sm font-semibold rounded-xl transition duration-150 {{ request()->routeIs('forecast.*') ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
-                            <div class="flex items-center gap-3">
-                                <svg class="w-5 h-5 {{ request()->routeIs('forecast.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('forecast.*') ? 'text-emerald-600' : 'text-slate-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                                 </svg>
-                                <span>Forecast Restok SMA</span>
+                                <span class="truncate">Forecast Restok</span>
                             </div>
-                            <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-md border border-emerald-200">7 Hari</span>
+                            <span class="flex-shrink-0 ml-2 px-2.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-md border border-emerald-200 whitespace-nowrap">7 Hari</span>
                         </a>
                     </div>
                 </div>
