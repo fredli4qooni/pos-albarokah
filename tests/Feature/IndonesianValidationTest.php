@@ -10,6 +10,12 @@ class IndonesianValidationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        app()->setLocale('id');
+    }
+
     public function test_login_fails_with_indonesian_error_message_on_wrong_credentials(): void
     {
         $user = User::factory()->create([

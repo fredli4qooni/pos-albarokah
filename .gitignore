@@ -29,3 +29,7 @@ AGENTS.md
 prd.md
 *.sqlite
 *.sqlite-journal
+
+scripts
+diagrams
+out
