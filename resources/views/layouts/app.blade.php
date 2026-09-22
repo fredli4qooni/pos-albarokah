@@ -14,8 +14,8 @@
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full font-sans antialiased text-slate-800 bg-slate-100" x-data="{ sidebarOpen: false }">
-    <div class="min-h-screen flex">
+<body class="h-full font-sans antialiased text-slate-800 bg-slate-100 overflow-hidden" x-data="{ sidebarOpen: false }">
+    <div class="h-screen flex overflow-hidden bg-slate-100">
         
         <!-- Mobile Sidebar Backdrop -->
         <div x-show="sidebarOpen" 
@@ -32,10 +32,10 @@
 
         <!-- Sidebar Navigation -->
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-               class="fixed inset-y-0 left-0 z-50 w-72 bg-white text-slate-700 flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 border-r border-slate-200 shadow-sm">
+               class="fixed inset-y-0 left-0 z-50 w-72 h-screen bg-white text-slate-700 flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:flex-shrink-0 border-r border-slate-200 shadow-sm">
             
             <!-- Brand Logo -->
-            <div class="h-20 flex items-center justify-between px-6 border-b border-slate-200 bg-white">
+            <div class="h-20 flex-shrink-0 flex items-center justify-between px-6 border-b border-slate-200 bg-white">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@
             </div>
 
             <!-- Quick Action: Kasir POS -->
-            <div class="p-4">
+            <div class="p-4 flex-shrink-0">
                 <a href="{{ Route::has('sales.create') ? route('sales.create') : url('/sales/create') }}" 
                    class="w-full flex items-center justify-center gap-2.5 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-sm transition duration-150">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +176,7 @@
             </nav>
 
             <!-- Bottom User Card -->
-            <div class="p-4 border-t border-slate-200 bg-slate-50">
+            <div class="p-4 border-t border-slate-200 bg-slate-50 flex-shrink-0">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3 min-w-0">
                         <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-bold flex items-center justify-center flex-shrink-0">
@@ -201,10 +201,10 @@
         </aside>
 
         <!-- Main Wrapper -->
-        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
             
             <!-- Top Navbar -->
-            <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10">
+            <header class="h-20 flex-shrink-0 bg-white border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10">
                 <div class="flex items-center gap-4">
                     <button @click="sidebarOpen = true" class="lg:hidden text-slate-600 hover:text-slate-900 p-2 rounded-lg hover:bg-slate-100">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
