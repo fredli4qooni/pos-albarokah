@@ -23,7 +23,7 @@ class UpdateProductRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'unit' => ['required', 'string', 'max:50'],
             'purchase_price' => ['required', 'numeric', 'min:0'],
-            'selling_price' => ['required', 'numeric', 'min:0'],
+            'selling_price' => ['required', 'numeric', 'min:0', 'gt:purchase_price'],
             'stock' => ['required', 'integer', 'min:0'],
             'min_stock' => ['required', 'integer', 'min:0'],
         ];
@@ -43,6 +43,7 @@ class UpdateProductRequest extends FormRequest
             'purchase_price.min' => 'Harga beli tidak boleh bernilai negatif.',
             'selling_price.required' => 'Harga jual wajib diisi.',
             'selling_price.min' => 'Harga jual tidak boleh bernilai negatif.',
+            'selling_price.gt' => 'Harga jual harus lebih besar dari harga beli.',
             'stock.required' => 'Jumlah stok awal wajib diisi.',
             'stock.min' => 'Stok tidak boleh bernilai negatif.',
             'min_stock.required' => 'Ambang stok minimum wajib diisi.',

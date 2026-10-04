@@ -18,6 +18,57 @@ class ForecastService
     }
 
     /**
+     * Calculate Demand Forecasting using Single Moving Average (SMA) from raw daily sales array.
+     *
+     * Business Rules:
+     * - Minimum window days (default 7 days).
+     * - Less than 7 days -> returns 'status' => 'Data Belum Cukup'.
+     * - 7 days or more -> returns SMA calculation and ceiling rounding ceil(SMA).
+     *
+     * @param  array<int|float>  $salesData  Array of sold quantities.
+     * @param  int|null  $window  Window days (default: config or 7 days).
+     * @return array<string, mixed>
+     */
+    public function calculateSMA(array $salesData, ?int $window = null): array
+    {
+        $window = $window ?? $this->getWindowDays();
+        $count = count($salesData);
+
+        if ($count < $window) {
+            return [
+                'has_enough_data' => false,
+                'status' => 'Data Belum Cukup',
+                'count' => $count,
+                'window' => $window,
+                'total' => (float) array_sum($salesData),
+                'raw_sma' => null,
+                'forecast_value' => null,
+                'forecast_ceil' => null,
+                'message' => "Data histori penjualan baru {$count} hari. Minimal {$window} hari data histori diperlukan untuk menghitung SMA.",
+            ];
+        }
+
+        // Take the latest $window entries
+        $relevantData = array_slice($salesData, -$window);
+        $total = (float) array_sum($relevantData);
+        $rawSma = $total / $window;
+        $forecastValue = round($rawSma, 2);
+        $forecastCeil = (int) ceil($rawSma);
+
+        return [
+            'has_enough_data' => true,
+            'status' => 'Data Cukup',
+            'count' => $count,
+            'window' => $window,
+            'total' => $total,
+            'raw_sma' => $rawSma,
+            'forecast_value' => $forecastValue,
+            'forecast_ceil' => $forecastCeil,
+            'message' => "Peramalan SMA {$window} hari berhasil dihitung dengan total {$total} unit.",
+        ];
+    }
+
+    /**
      * Calculate Demand Forecasting using Single Moving Average (SMA)
      * for a specific product.
      *
