@@ -33,3 +33,5 @@ prd.md
 scripts
 diagrams
 out
+~$*.docx
+*.tmp
