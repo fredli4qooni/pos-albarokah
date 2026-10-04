@@ -170,7 +170,7 @@ class ReportController extends Controller
         ];
 
         $receivables = $query->orderByDesc('remaining_balance')
-            ->orderBy('due_date')
+            ->latest('created_at')
             ->paginate(15)
             ->withQueryString();
 
@@ -212,7 +212,7 @@ class ReportController extends Controller
         }
 
         $receivables = $query->orderByDesc('remaining_balance')
-            ->orderBy('due_date')
+            ->latest('created_at')
             ->get();
 
         $summary = [

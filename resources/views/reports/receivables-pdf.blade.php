@@ -199,15 +199,14 @@
         <thead>
             <tr>
                 <th class="text-center" style="width: 30px;">No</th>
-                <th style="width: 100px;">No. Nota</th>
-                <th style="width: 80px;">Tgl Nota</th>
+                <th style="width: 105px;">No. Nota</th>
+                <th style="width: 85px;">Tgl Nota</th>
                 <th>Nama Pelanggan</th>
-                <th style="width: 90px;">No. Telepon</th>
-                <th style="width: 80px;">Jatuh Tempo</th>
-                <th class="text-right" style="width: 95px;">Total Kredit</th>
-                <th class="text-right" style="width: 95px;">Terbayar</th>
-                <th class="text-right" style="width: 95px;">Sisa Saldo</th>
-                <th class="text-center" style="width: 75px;">Status</th>
+                <th style="width: 95px;">No. Telepon</th>
+                <th class="text-right" style="width: 100px;">Total Kredit</th>
+                <th class="text-right" style="width: 100px;">Terbayar</th>
+                <th class="text-right" style="width: 100px;">Sisa Saldo</th>
+                <th class="text-center" style="width: 80px;">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -218,7 +217,6 @@
                     <td>{{ $rec->created_at ? $rec->created_at->format('d/m/Y') : '-' }}</td>
                     <td style="font-weight: 500;">{{ $rec->customer->name ?? '-' }}</td>
                     <td>{{ $rec->customer->phone ?? '-' }}</td>
-                    <td>{{ $rec->due_date ? $rec->due_date->format('d/m/Y') : '-' }}</td>
                     <td class="text-right">Rp {{ number_format($rec->total_amount, 0, ',', '.') }}</td>
                     <td class="text-right" style="color: #047857;">Rp {{ number_format($rec->paid_amount, 0, ',', '.') }}</td>
                     <td class="text-right" style="font-weight: bold; color: {{ $rec->remaining_balance > 0 ? '#b45309' : '#64748b' }};">
@@ -234,7 +232,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10" class="text-center" style="padding: 20px; color: #64748b;">
+                    <td colspan="9" class="text-center" style="padding: 20px; color: #64748b;">
                         Tidak ada catatan piutang ditemukan dengan kriteria filter saat ini.
                     </td>
                 </tr>
@@ -243,7 +241,7 @@
         @if($receivables->isNotEmpty())
             <tfoot>
                 <tr style="background-color: #f1f5f9; font-weight: bold; border-top: 2px solid #b45309;">
-                    <td colspan="6" class="text-right">TOTAL KESELURUHAN:</td>
+                    <td colspan="5" class="text-right">TOTAL KESELURUHAN:</td>
                     <td class="text-right">Rp {{ number_format($summary['total_credit_issued'], 0, ',', '.') }}</td>
                     <td class="text-right" style="color: #047857;">Rp {{ number_format($summary['total_paid'], 0, ',', '.') }}</td>
                     <td class="text-right" style="color: #dc2626; font-size: 9.5pt;">

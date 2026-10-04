@@ -11,7 +11,7 @@
             </div>
             <h1 class="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Laporan Piutang & Tagihan Petani</h1>
             <p class="text-sm text-slate-500 mt-0.5">
-                Audit saldo piutang aktif, histori cicilan angsuran, jatuh tempo, dan rekapitulasi per pelanggan.
+                Audit saldo piutang aktif, histori pembayaran angsuran, dan rekapitulasi tagihan per pelanggan.
             </p>
         </div>
 
@@ -133,7 +133,6 @@
                         <th class="py-3 px-4">No. Nota</th>
                         <th class="py-3 px-4">Tanggal Nota</th>
                         <th class="py-3 px-4">Nama Pelanggan</th>
-                        <th class="py-3 px-4">Jatuh Tempo</th>
                         <th class="py-3 px-4 text-right">Total Kredit</th>
                         <th class="py-3 px-4 text-right">Terbayar</th>
                         <th class="py-3 px-4 text-right">Sisa Saldo</th>
@@ -154,21 +153,6 @@
                                 <span class="font-semibold text-slate-900">{{ $rec->customer->name ?? 'Anonim' }}</span>
                                 @if($rec->customer?->phone)
                                     <span class="block text-[11px] text-slate-500">{{ $rec->customer->phone }}</span>
-                                @endif
-                            </td>
-                            <td class="py-3 px-4 text-xs">
-                                @if($rec->due_date)
-                                    @php
-                                        $isOverdue = $rec->status === 'belum_lunas' && $rec->due_date->isPast();
-                                    @endphp
-                                    <span class="{{ $isOverdue ? 'text-rose-600 font-bold' : 'text-slate-700' }}">
-                                        {{ $rec->due_date->format('d/m/Y') }}
-                                        @if($isOverdue)
-                                            <span class="block text-[10px] text-rose-600 font-bold">Jatuh Tempo!</span>
-                                        @endif
-                                    </span>
-                                @else
-                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-right font-medium text-slate-800 font-mono">
@@ -201,7 +185,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="py-12 text-center text-slate-400">
+                            <td colspan="8" class="py-12 text-center text-slate-400">
                                 <svg class="w-12 h-12 mx-auto text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                                 </svg>

@@ -238,7 +238,6 @@ class BlackBoxPrdScenariosTest extends TestCase
         $creditTransactionPayload = [
             'customer_id' => $customer->id,
             'payment_method' => 'credit',
-            'due_date' => now()->addDays(14)->toDateString(),
             'items' => [
                 [
                     'product_id' => $product->id,

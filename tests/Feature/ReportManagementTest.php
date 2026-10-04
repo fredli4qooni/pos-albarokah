@@ -165,7 +165,6 @@ class ReportManagementTest extends TestCase
             'total_amount' => 500000,
             'paid_amount' => 200000,
             'remaining_balance' => 300000,
-            'due_date' => now()->addDays(14),
             'status' => 'belum_lunas',
         ]);
 
