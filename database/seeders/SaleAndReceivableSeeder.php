@@ -20,8 +20,10 @@ class SaleAndReceivableSeeder extends Seeder
         $gramoxone = Product::where('code', 'HRB-GRM-01')->first();
         $roundup = Product::where('code', 'HRB-RND-01')->first();
         $prevathon = Product::where('code', 'INS-PRV-01')->first();
-        $urea = Product::where('code', 'PPK-URA-01')->first();
+        $urea = Product::where('code', 'SKU-UREA-50KG')->first();
         $npk = Product::where('code', 'PPK-NPK-01')->first();
+        $phonska = Product::where('code', 'PPK-PHO-50KG')->first();
+        $benihJagung = Product::where('code', 'BNH-JGH-01')->first();
 
         $supardi = Customer::where('name', 'Pak Supardi')->first();
         $joko = Customer::where('name', 'Pak Joko Sutrisno')->first();
@@ -135,10 +137,81 @@ class SaleAndReceivableSeeder extends Seeder
             );
         }
 
-        // 5. Credit Transactions & Receivables
-        // Credit Sale 1: Pak Supardi (5 Gramoxone = Rp 475.000, partially paid Rp 200.000)
-        $date1 = Carbon::today()->subDays(6)->setTime(9, 30, 0);
-        $total1 = 5 * (float) $gramoxone->selling_price;
+        // 5. 7 Days Historical Sales for NPK Phonska 50kg (>= 7 days for SMA calculation & Restock test)
+        // Quantities sold on days 7..1 ago: [5, 4, 6, 5, 4, 7, 5] -> total 36 sak (rata-rata 5.14 sak/hari)
+        // Stok aktual = 3 sak -> Stok (3) < Forecast (5.14) -> Status: 'Perlu Restok', Shortage: 3 sak
+        if ($phonska) {
+            $phonskaSalesQty = [5, 4, 6, 5, 4, 7, 5];
+            foreach ($phonskaSalesQty as $index => $qty) {
+                $daysAgo = 7 - $index;
+                $date = Carbon::today()->subDays($daysAgo)->setTime(11, 45, 0);
+
+                $subtotal = $qty * (float) $phonska->selling_price;
+                $sale = Sale::create([
+                    'invoice_no' => 'INV-'.$date->format('Ymd').'-PHO'.($index + 1),
+                    'user_id' => $admin->id,
+                    'customer_id' => null,
+                    'payment_method' => 'cash',
+                    'subtotal' => $subtotal,
+                    'total' => $subtotal,
+                    'status' => 'completed',
+                    'sold_at' => $date,
+                ]);
+
+                $sale->items()->create([
+                    'product_id' => $phonska->id,
+                    'quantity' => $qty,
+                    'price' => $phonska->selling_price,
+                    'subtotal' => $subtotal,
+                ]);
+
+                DailySalesSummary::updateOrCreate(
+                    ['product_id' => $phonska->id, 'sale_date' => $date->toDateString()],
+                    ['quantity_sold' => $qty]
+                );
+            }
+        }
+
+        // 6. Only 4 Days Sales for Benih jagung hibrida 1kg (< 7 days -> To test "Data Belum Mencukupi")
+        if ($benihJagung) {
+            $benihSalesQty = [2, 3, 2, 4];
+            foreach ($benihSalesQty as $index => $qty) {
+                $daysAgo = 4 - $index;
+                $date = Carbon::today()->subDays($daysAgo)->setTime(14, 15, 0);
+
+                $subtotal = $qty * (float) $benihJagung->selling_price;
+                $sale = Sale::create([
+                    'invoice_no' => 'INV-'.$date->format('Ymd').'-JGH'.($index + 1),
+                    'user_id' => $admin->id,
+                    'customer_id' => null,
+                    'payment_method' => 'cash',
+                    'subtotal' => $subtotal,
+                    'total' => $subtotal,
+                    'status' => 'completed',
+                    'sold_at' => $date,
+                ]);
+
+                $sale->items()->create([
+                    'product_id' => $benihJagung->id,
+                    'quantity' => $qty,
+                    'price' => $benihJagung->selling_price,
+                    'subtotal' => $subtotal,
+                ]);
+
+                DailySalesSummary::updateOrCreate(
+                    ['product_id' => $benihJagung->id, 'sale_date' => $date->toDateString()],
+                    ['quantity_sold' => $qty]
+                );
+            }
+        }
+
+        // 7. Credit Transactions & Receivables
+        // Credit Sale 1: Pak Supardi (Total Rp 300.000, partially paid Rp 200.000 -> Sisa Saldo Persis Rp 100.000)
+        // Disiapkan khusus untuk pengujian UAT:
+        // - Uji Kasus 6: Bayar angsuran Rp 150.000 (melebihi sisa Rp 100.000) -> Ditolak sistem
+        // - Uji Kasus 7: Pelunasan pas Rp 100.000 -> Berhasil status lunas
+        $date1 = Carbon::today()->subDays(5)->setTime(9, 30, 0);
+        $total1 = 300000;
         $sale1 = Sale::create([
             'invoice_no' => 'INV-'.$date1->format('Ymd').'-CR01',
             'user_id' => $admin->id,
@@ -151,9 +224,15 @@ class SaleAndReceivableSeeder extends Seeder
         ]);
         $sale1->items()->create([
             'product_id' => $gramoxone->id,
-            'quantity' => 5,
-            'price' => $gramoxone->selling_price,
-            'subtotal' => $total1,
+            'quantity' => 2,
+            'price' => 95000,
+            'subtotal' => 190000,
+        ]);
+        $sale1->items()->create([
+            'product_id' => $roundup->id,
+            'quantity' => 1,
+            'price' => 110000,
+            'subtotal' => 110000,
         ]);
         $rec1 = Receivable::create([
             'sale_id' => $sale1->id,
@@ -163,8 +242,8 @@ class SaleAndReceivableSeeder extends Seeder
             'remaining_balance' => $total1,
             'status' => 'belum_lunas',
         ]);
-        // Cicilan pertama: Rp 200.000
-        $rec1->recordPayment(200000, Carbon::today()->subDays(2)->toDateTimeString(), 'Cicilan awal tunai saat panen jagung');
+        // Cicilan awal: Rp 200.000 -> Menyisakan saldo tepat Rp 100.000!
+        $rec1->recordPayment(200000, Carbon::today()->subDays(2)->toDateTimeString(), 'Cicilan awal tunai saat panen');
 
         // Credit Sale 2: Pak Joko Sutrisno (1 Urea = Rp 310.000, paid off in full)
         $date2 = Carbon::today()->subDays(10)->setTime(13, 45, 0);
