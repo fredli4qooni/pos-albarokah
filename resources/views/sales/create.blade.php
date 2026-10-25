@@ -314,7 +314,7 @@
 
         </div>
 
-        <!-- MODAL: Barcode Scanner Camera (html5-qrcode) -->
+        <!-- MODAL: Barcode Scanner Camera (html5-qrcode with 1D Barcode & 2D QR Optimization) -->
         <div x-show="scannerModalOpen" 
              x-cloak 
              class="fixed inset-0 z-50 overflow-y-auto" 
@@ -326,24 +326,63 @@
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
 
                 <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-slate-200">
-                    <div class="p-5 bg-white border-b border-slate-200 text-slate-900 flex items-center justify-between">
+                    <div class="p-4 sm:p-5 bg-white border-b border-slate-200 text-slate-900 flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shadow-sm">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold text-slate-900">Scanner Barcode Kamera</h3>
-                                <p class="text-[11px] text-slate-500">Arahkan kamera ke barcode kemasan produk</p>
+                                <h3 class="text-sm font-bold text-slate-900">Scanner Barcode & QR Kamera</h3>
+                                <p class="text-[11px] text-slate-500">Mendukung Kode Batang 1D (EAN/Code128) & QR Code 2D</p>
                             </div>
                         </div>
-                        <button @click="closeScannerModal()" type="button" class="text-slate-400 hover:text-slate-700 p-1">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                        </button>
+                        <div class="flex items-center gap-1.5">
+                            <!-- Torch Button if supported -->
+                            <button x-show="hasTorch" 
+                                    @click="toggleTorch()" 
+                                    type="button" 
+                                    :class="isTorchOn ? 'bg-amber-100 text-amber-800 border-amber-300 ring-2 ring-amber-400' : 'bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200'"
+                                    class="p-2 rounded-xl border text-xs font-bold flex items-center gap-1 transition"
+                                    title="Nyalakan/Matikan Senter Flash">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            </button>
+                            <button @click="closeScannerModal()" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-xl hover:bg-slate-100 transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
                     </div>
 
+                    <!-- Viewfinder Container -->
                     <div class="p-4 bg-slate-950">
-                        <div id="reader" class="w-full rounded-2xl overflow-hidden bg-black text-white min-h-[260px] flex items-center justify-center"></div>
-                        <p class="text-center text-xs text-slate-400 mt-3" x-text="scannerMessage || 'Mempersiapkan kamera...'"></p>
+                        <div class="relative w-full rounded-2xl overflow-hidden bg-black text-white min-h-[270px] flex items-center justify-center border border-slate-800">
+                            <div id="reader" class="w-full"></div>
+                            
+                            <!-- Laser Scanline Aiming Guide (Visual alignment for 1D barcodes) -->
+                            <div class="pointer-events-none absolute inset-x-8 top-1/2 -translate-y-1/2 h-0.5 bg-red-500 shadow-[0_0_12px_3px_rgba(239,68,68,0.85)] animate-pulse"></div>
+                        </div>
+
+                        <!-- Camera Switcher (for devices with multiple lenses) -->
+                        <div x-show="availableCameras.length > 1" class="mt-2.5 flex items-center justify-between text-xs text-slate-400">
+                            <span class="text-[11px]">Pilih Lensa:</span>
+                            <select @change="switchCamera($event.target.value)" 
+                                    class="bg-slate-900 border border-slate-800 text-slate-300 text-[11px] rounded-lg px-2 py-1 focus:ring-1 focus:ring-emerald-500">
+                                <template x-for="cam in availableCameras" :key="cam.id">
+                                    <option :value="cam.id" :selected="cam.id === selectedCameraId" x-text="cam.label || 'Kamera ' + cam.id"></option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <p class="text-center text-xs text-slate-300 mt-2.5 font-medium" x-text="scannerMessage || 'Mempersiapkan kamera...'"></p>
+
+                        <!-- Scanning Tips Guide -->
+                        <div class="mt-3 p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400 space-y-1.5">
+                            <p class="text-slate-200 font-bold flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span>Tips Agar Cepat Terbaca:</span>
+                            </p>
+                            <p class="leading-relaxed">• <strong>Kode Batang (1D):</strong> Sejajarkan garis kemasan dengan <strong>garis merah</strong>. Jaga jarak <strong>15–25 cm</strong> agar kamera fokus dan hindari silau pantulan lampu.</p>
+                            <p class="leading-relaxed">• <strong>QR Code (2D):</strong> Terpindai instan dari segala sudut kemiringan (360°).</p>
+                        </div>
                     </div>
 
                     <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
@@ -488,6 +527,10 @@
                 scannerModalOpen: false,
                 html5QrCode: null,
                 scannerMessage: '',
+                hasTorch: false,
+                isTorchOn: false,
+                availableCameras: [],
+                selectedCameraId: null,
 
                 // Quick Customer Modal
                 customerModalOpen: false,
@@ -616,6 +659,7 @@
                 openScannerModal() {
                     this.scannerModalOpen = true;
                     this.scannerMessage = 'Menghidupkan kamera...';
+                    this.isTorchOn = false;
 
                     this.$nextTick(() => {
                         this.initHtml5QrCode();
@@ -627,9 +671,12 @@
                         this.html5QrCode.stop().then(() => {
                             this.html5QrCode.clear();
                             this.html5QrCode = null;
+                            this.isTorchOn = false;
                             this.scannerModalOpen = false;
                         }).catch(err => {
                             console.warn('Scanner stop error:', err);
+                            this.html5QrCode = null;
+                            this.isTorchOn = false;
                             this.scannerModalOpen = false;
                         });
                     } else {
@@ -643,34 +690,123 @@
                         return;
                     }
 
-                    const html5QrCode = new window.Html5Qrcode("reader");
+                    // 1. Explicit formats definition: Prioritize fast 1D retail barcodes and 2D QR codes
+                    const formats = window.Html5QrcodeSupportedFormats ? [
+                        window.Html5QrcodeSupportedFormats.QR_CODE,
+                        window.Html5QrcodeSupportedFormats.EAN_13,
+                        window.Html5QrcodeSupportedFormats.CODE_128,
+                        window.Html5QrcodeSupportedFormats.CODE_39,
+                        window.Html5QrcodeSupportedFormats.UPC_A,
+                        window.Html5QrcodeSupportedFormats.UPC_E,
+                        window.Html5QrcodeSupportedFormats.EAN_8,
+                    ] : undefined;
+
+                    // 2. Hardware acceleration: enable native BarcodeDetector API if supported (Chrome Android / iOS 17+)
+                    const html5QrCode = new window.Html5Qrcode("reader", {
+                        formatsToSupport: formats,
+                        verbose: false,
+                        experimentalFeatures: {
+                            useBarCodeDetectorIfSupported: true
+                        }
+                    });
                     this.html5QrCode = html5QrCode;
 
-                    const config = { fps: 10, qrbox: { width: 250, height: 180 } };
+                    // 3. Responsive scanning box: wide aspect ratio optimized for 1D barcode while enclosing 2D QR
+                    const qrboxFunction = (viewfinderWidth, viewfinderHeight) => {
+                        const width = Math.min(Math.floor(viewfinderWidth * 0.88), 360);
+                        const height = Math.min(Math.floor(viewfinderHeight * 0.60), 220);
+                        return {
+                            width: Math.max(width, 250),
+                            height: Math.max(height, 140)
+                        };
+                    };
+
+                    const config = {
+                        fps: 25, // Higher frame sampling rate (25 FPS) to eliminate motion lag
+                        qrbox: qrboxFunction,
+                        aspectRatio: 1.333333,
+                        videoConstraints: {
+                            facingMode: { ideal: "environment" },
+                            width: { ideal: 1280, min: 640 },
+                            height: { ideal: 720, min: 480 }
+                        }
+                    };
+
+                    // Detect multiple back cameras if device has them
+                    window.Html5Qrcode.getCameras().then(cameras => {
+                        if (cameras && cameras.length > 0) {
+                            this.availableCameras = cameras;
+                            if (!this.selectedCameraId) {
+                                const backCam = cameras.find(c => /back|rear|environment|belakang/i.test(c.label));
+                                this.selectedCameraId = backCam ? backCam.id : cameras[0].id;
+                            }
+                        }
+                    }).catch(() => {
+                        // ignore camera query error, fallback to facingMode
+                    });
+
+                    const cameraTarget = this.selectedCameraId ? { deviceId: { exact: this.selectedCameraId } } : { facingMode: "environment" };
 
                     html5QrCode.start(
-                        { facingMode: "environment" },
+                        cameraTarget,
                         config,
                         (decodedText) => {
                             this.onBarcodeScanned(decodedText);
                         },
                         (errorMessage) => {
-                            // frame scan miss - no action needed
+                            // Frame miss is expected while user aligns camera
                         }
                     ).then(() => {
-                        this.scannerMessage = 'Kamera aktif. Silakan dekatkan barcode produk.';
+                        this.scannerMessage = 'Kamera aktif. Posisikan barcode produk sejajar garis merah.';
+
+                        // Check if flashlight / torch is supported by device camera
+                        try {
+                            const capabilities = html5QrCode.getRunningTrackCapabilities();
+                            this.hasTorch = Boolean(capabilities && capabilities.torch);
+                        } catch (e) {
+                            this.hasTorch = false;
+                        }
                     }).catch(err => {
                         console.error('Camera access error:', err);
-                        this.scannerMessage = 'Gagal mengakses kamera. Pastikan izin kamera aktif (HTTPS / Localhost).';
+                        this.scannerMessage = 'Gagal mengakses kamera. Pastikan izin kamera telah diberikan di peramban (browser).';
+                    });
+                },
+
+                toggleTorch() {
+                    if (!this.html5QrCode || !this.hasTorch) return;
+                    this.isTorchOn = !this.isTorchOn;
+                    try {
+                        this.html5QrCode.applyVideoConstraints({
+                            advanced: [{ torch: this.isTorchOn }]
+                        });
+                    } catch (err) {
+                        console.warn('Torch toggle error:', err);
+                    }
+                },
+
+                switchCamera(deviceId) {
+                    if (!this.html5QrCode || !deviceId) return;
+                    this.selectedCameraId = deviceId;
+                    this.html5QrCode.stop().then(() => {
+                        this.html5QrCode.clear();
+                        this.initHtml5QrCode();
+                    }).catch(err => {
+                        console.warn('Camera switch error:', err);
                     });
                 },
 
                 onBarcodeScanned(code) {
                     this.playBeep(880, 120);
-                    const cleanCode = code.trim();
+                    let cleanCode = code ? String(code).trim() : '';
+
+                    // Handle QR codes containing URLs or prefixes
+                    if (cleanCode.includes('/') || cleanCode.includes('=')) {
+                        const parts = cleanCode.split(/[\/=]/);
+                        cleanCode = parts[parts.length - 1].trim();
+                    }
 
                     const matched = this.products.find(p => 
-                        (p.barcode && p.barcode === cleanCode) || 
+                        (p.barcode && p.barcode.toLowerCase() === cleanCode.toLowerCase()) || 
                         (p.code && p.code.toLowerCase() === cleanCode.toLowerCase())
                     );
 
@@ -679,7 +815,7 @@
                         this.showNotification('success', 'Produk ' + matched.name + ' berhasil dimasukkan ke keranjang.');
                         this.closeScannerModal();
                     } else {
-                        this.showNotification('warning', 'Barcode ' + cleanCode + ' tidak cocok dengan produk manapun.');
+                        this.showNotification('warning', 'Kode "' + cleanCode + '" tidak cocok dengan produk manapun.');
                     }
                 },
 
