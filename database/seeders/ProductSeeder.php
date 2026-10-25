@@ -10,205 +10,38 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $herbisida = Category::where('slug', 'herbisida')->first()->id;
-        $fungisida = Category::where('slug', 'fungisida')->first()->id;
-        $insektisida = Category::where('slug', 'insektisida')->first()->id;
-        $pupuk = Category::where('slug', 'pupuk')->first()->id;
-        $benih = Category::where('slug', 'benih')->first()->id;
-        $alat = Category::where('slug', 'alat-tani')->first()->id;
-
-        $products = [
-            // Herbisida (Fokus proposal penelitian)
-            [
-                'category_id' => $herbisida,
-                'code' => 'HRB-GRM-01',
-                'barcode' => '8991234001011',
-                'name' => 'Gramoxone 276 SL 1L',
-                'unit' => 'Botol',
-                'purchase_price' => 82000,
-                'selling_price' => 95000,
-                'stock' => 12,
-                'min_stock' => 10,
-            ],
-            [
-                'category_id' => $herbisida,
-                'code' => 'HRB-RND-01',
-                'barcode' => '8991234001028',
-                'name' => 'Roundup 486 SL 1 Liter',
-                'unit' => 'Botol',
-                'purchase_price' => 95000,
-                'selling_price' => 110000,
-                'stock' => 4, // Stockout risk: below min_stock
-                'min_stock' => 8,
-            ],
-            [
-                'category_id' => $herbisida,
-                'code' => 'HRB-RMB-01',
-                'barcode' => '8991234001035',
-                'name' => 'Rambo 480 SL 1 Liter',
-                'unit' => 'Botol',
-                'purchase_price' => 70000,
-                'selling_price' => 85000,
-                'stock' => 15,
-                'min_stock' => 8,
-            ],
-            [
-                'category_id' => $herbisida,
-                'code' => 'HRB-CBA-01',
-                'barcode' => '8991234001042',
-                'name' => 'CBA 6 1 Liter',
-                'unit' => 'Botol',
-                'purchase_price' => 60000,
-                'selling_price' => 72000,
-                'stock' => 20,
-                'min_stock' => 10,
-            ],
-            [
-                'category_id' => $herbisida,
-                'code' => 'HRB-ALY-01',
-                'barcode' => '8991234001059',
-                'name' => 'Ally 20 WG 5 Gram',
-                'unit' => 'Bungkus',
-                'purchase_price' => 18000,
-                'selling_price' => 25000,
-                'stock' => 50,
-                'min_stock' => 15,
-            ],
-
-            // Fungisida
-            [
-                'category_id' => $fungisida,
-                'code' => 'FNG-ANT-01',
-                'barcode' => '8991234002018',
-                'name' => 'Antracol 70 WP 250 Gram',
-                'unit' => 'Bungkus',
-                'purchase_price' => 45000,
-                'selling_price' => 55000,
-                'stock' => 18,
-                'min_stock' => 8,
-            ],
-            [
-                'category_id' => $fungisida,
-                'code' => 'FNG-DTH-01',
-                'barcode' => '8991234002025',
-                'name' => 'Dithane M-45 80 WP 500 Gram',
-                'unit' => 'Bungkus',
-                'purchase_price' => 75000,
-                'selling_price' => 88000,
-                'stock' => 7,
-                'min_stock' => 5,
-            ],
-
-            // Insektisida
-            [
-                'category_id' => $insektisida,
-                'code' => 'INS-PRV-01',
-                'barcode' => '8991234003015',
-                'name' => 'Prevathon 50 SC 100 ml',
-                'unit' => 'Botol',
-                'purchase_price' => 80000,
-                'selling_price' => 95000,
-                'stock' => 10,
-                'min_stock' => 5,
-            ],
-            [
-                'category_id' => $insektisida,
-                'code' => 'INS-RGT-01',
-                'barcode' => '8991234003022',
-                'name' => 'Regent 50 SC 100 ml',
-                'unit' => 'Botol',
-                'purchase_price' => 52000,
-                'selling_price' => 62000,
-                'stock' => 14,
-                'min_stock' => 6,
-            ],
-
-            // Pupuk
-            [
-                'category_id' => $pupuk,
-                'code' => 'PPK-NPK-01',
-                'barcode' => '8991234004012',
-                'name' => 'Pupuk NPK Mutiara 16-16-16 1 Kg',
-                'unit' => 'Kg',
-                'purchase_price' => 16000,
-                'selling_price' => 20000,
-                'stock' => 45,
-                'min_stock' => 20,
-            ],
-            [
-                'category_id' => $pupuk,
-                'code' => 'PPK-NPK-PT01',
-                'barcode' => '8997234161616',
-                'name' => 'NPK 16-16-16 Pak Tani 1kg',
-                'unit' => 'Bungkus',
-                'purchase_price' => 28000,
-                'selling_price' => 35000,
-                'stock' => 50,
-                'min_stock' => 10,
-            ],
-            [
-                'category_id' => $pupuk,
-                'code' => 'PPK-PHO-50KG',
-                'barcode' => '8991234004036',
-                'name' => 'NPK Phonska 50kg',
-                'unit' => 'Sak',
-                'purchase_price' => 220000,
-                'selling_price' => 255000,
-                'stock' => 3,
-                'min_stock' => 5,
-            ],
-            [
-                'category_id' => $pupuk,
-                'code' => 'SKU-UREA-50KG',
-                'barcode' => '8991234004029',
-                'name' => 'Urea 50kg',
-                'unit' => 'Sak',
-                'purchase_price' => 280000,
-                'selling_price' => 310000,
-                'stock' => 8,
-                'min_stock' => 5,
-            ],
-
-            // Benih
-            [
-                'category_id' => $benih,
-                'code' => 'BNH-INP-01',
-                'barcode' => '8991234005019',
-                'name' => 'Benih Padi Inpari 32 HDB 5 Kg',
-                'unit' => 'Bungkus',
-                'purchase_price' => 70000,
-                'selling_price' => 85000,
-                'stock' => 25,
-                'min_stock' => 10,
-            ],
-            [
-                'category_id' => $benih,
-                'code' => 'BNH-JGH-01',
-                'barcode' => '8991234005026',
-                'name' => 'Benih jagung hibrida 1kg',
-                'unit' => 'Bungkus',
-                'purchase_price' => 50000,
-                'selling_price' => 65000,
-                'stock' => 20,
-                'min_stock' => 5,
-            ],
-
-            // Alat
-            [
-                'category_id' => $alat,
-                'code' => 'ALT-SPR-01',
-                'barcode' => '8991234006016',
-                'name' => 'Tangki Sprayer Elektrik CBA 16 Liter',
-                'unit' => 'Pcs',
-                'purchase_price' => 420000,
-                'selling_price' => 490000,
-                'stock' => 3,
-                'min_stock' => 3,
-            ],
+        $categoryMap = [
+            'Herbisida' => Category::where('slug', 'herbisida')->value('id'),
+            'Fungisida' => Category::where('slug', 'fungisida')->value('id'),
+            'Insektisida' => Category::where('slug', 'insektisida')->value('id'),
+            'Bakterisida' => Category::where('slug', 'bakterisida')->value('id'),
+            'Pupuk' => Category::where('slug', 'pupuk')->value('id'),
+            'Benih' => Category::where('slug', 'benih')->value('id'),
+            'Alat & Perlengkapan' => Category::where('slug', 'alat-tani')->value('id'),
+            'Moluskisida & Rodentisida' => Category::where('slug', 'moluskisida-rodentisida')->value('id'),
+            'Perekat & Adjuvan' => Category::where('slug', 'perekat-adjuvan')->value('id'),
+            'ZPT & Biostimulan' => Category::where('slug', 'zpt-biostimulan')->value('id'),
         ];
 
-        foreach ($products as $item) {
-            Product::firstOrCreate(['code' => $item['code']], $item);
+        $jsonFile = database_path('data/products_369.json');
+        if (file_exists($jsonFile)) {
+            $items = json_decode(file_get_contents($jsonFile), true);
+            foreach ($items as $item) {
+                $categoryId = $categoryMap[$item['category']] ?? $categoryMap['Pupuk'];
+                Product::firstOrCreate(
+                    ['code' => $item['code']],
+                    [
+                        'category_id' => $categoryId,
+                        'barcode' => $item['barcode'],
+                        'name' => $item['name'],
+                        'unit' => $item['unit'],
+                        'purchase_price' => $item['purchase_price'],
+                        'selling_price' => $item['selling_price'],
+                        'stock' => $item['stock'],
+                        'min_stock' => $item['min_stock'] ?? 5,
+                    ]
+                );
+            }
         }
     }
 }

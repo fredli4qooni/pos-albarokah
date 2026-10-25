@@ -40,6 +40,26 @@ class CategorySeeder extends Seeder
                 'slug' => 'alat-tani',
                 'description' => 'Alat semprot sprayer, nozzle, selang, dan perlengkapan pelindung petani.',
             ],
+            [
+                'name' => 'Bakterisida',
+                'slug' => 'bakterisida',
+                'description' => 'Bakterisida pertanian pengendali layu bakteri dan busuk basah tanaman.',
+            ],
+            [
+                'name' => 'Moluskisida & Rodentisida',
+                'slug' => 'moluskisida-rodentisida',
+                'description' => 'Obat pengendali hama keong mas, siput, dan tikus sawah.',
+            ],
+            [
+                'name' => 'Perekat & Adjuvan',
+                'slug' => 'perekat-adjuvan',
+                'description' => 'Bahan perekat, perata, dan penembus untuk efikasi semprot pestisida.',
+            ],
+            [
+                'name' => 'ZPT & Biostimulan',
+                'slug' => 'zpt-biostimulan',
+                'description' => 'Zat pengatur tumbuh (ZPT) pemacu akar, tunas, bunga, dan buah.',
+            ],
         ];
 
         foreach ($categories as $cat) {
