@@ -38,7 +38,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
                     </svg>
-                    <span>Scan Barcode Kamera</span>
+                    <span>Scan QR Code Kamera</span>
                 </button>
                 <div class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-slate-100 rounded-xl border border-slate-200 text-[11px] text-slate-600">
                     <span class="font-mono bg-white border border-slate-300 px-1.5 py-0.5 rounded text-slate-800 font-bold">F2</span> Cari Barang
@@ -66,7 +66,7 @@
                                x-model="searchQuery" 
                                @keydown.enter.prevent="handleSearchEnter()"
                                type="text" 
-                               placeholder="Cari produk (Nama, Kode SKU, Barcode)... [Tekan Enter]" 
+                               placeholder="Cari produk (Nama, SKU, QR Code)... [Tekan Enter]" 
                                class="w-full pl-11 pr-24 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition">
                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
                             <span class="text-xs text-slate-400 bg-slate-200/80 px-2 py-1 rounded-md font-mono" x-text="filteredProducts.length + ' barang'"></span>
@@ -206,7 +206,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
                         <p class="text-xs font-medium">Keranjang masih kosong</p>
-                        <p class="text-[11px] text-slate-400 mt-0.5">Klik barang di katalog atau scan barcode untuk menambah.</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Klik barang di katalog atau scan QR Code kemasan untuk menambah.</p>
                     </div>
                 </div>
 
@@ -332,8 +332,8 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold text-slate-900">Scanner Barcode & QR Kamera</h3>
-                                <p class="text-[11px] text-slate-500">Mendukung Kode Batang 1D (EAN/Code128) & QR Code 2D</p>
+                                <h3 class="text-sm font-bold text-slate-900">Scanner QR Code Kamera</h3>
+                                <p class="text-[11px] text-slate-500">Arahkan kamera ke QR Code kemasan produk</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-1.5">
@@ -352,13 +352,27 @@
                         </div>
                     </div>
 
-                    <!-- Viewfinder Container -->
+                    <!-- Viewfinder Container with Square QR Reticle -->
                     <div class="p-4 bg-slate-950">
-                        <div class="relative w-full rounded-2xl overflow-hidden bg-black text-white min-h-[270px] flex items-center justify-center border border-slate-800">
+                        <div class="relative w-full rounded-2xl overflow-hidden bg-black text-white min-h-[280px] flex items-center justify-center border border-slate-800">
                             <div id="reader" class="w-full"></div>
                             
-                            <!-- Laser Scanline Aiming Guide (Visual alignment for 1D barcodes) -->
-                            <div class="pointer-events-none absolute inset-x-8 top-1/2 -translate-y-1/2 h-0.5 bg-red-500 shadow-[0_0_12px_3px_rgba(239,68,68,0.85)] animate-pulse"></div>
+                            <!-- Square QR Aiming Reticle (4 corner brackets) -->
+                            <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+                                <div class="relative w-48 h-48 sm:w-56 sm:h-56">
+                                    <!-- Top-Left Corner -->
+                                    <div class="absolute top-0 left-0 w-7 h-7 border-t-4 border-l-4 border-emerald-400 rounded-tl-lg shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                    <!-- Top-Right Corner -->
+                                    <div class="absolute top-0 right-0 w-7 h-7 border-t-4 border-r-4 border-emerald-400 rounded-tr-lg shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                    <!-- Bottom-Left Corner -->
+                                    <div class="absolute bottom-0 left-0 w-7 h-7 border-b-4 border-l-4 border-emerald-400 rounded-bl-lg shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                    <!-- Bottom-Right Corner -->
+                                    <div class="absolute bottom-0 right-0 w-7 h-7 border-b-4 border-r-4 border-emerald-400 rounded-br-lg shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                    
+                                    <!-- Center Scanning Line Indicator -->
+                                    <div class="absolute inset-x-2 top-1/2 -translate-y-1/2 h-0.5 bg-emerald-400 shadow-[0_0_10px_2px_rgba(52,211,153,0.9)] animate-pulse"></div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Camera Switcher (for devices with multiple lenses) -->
@@ -378,10 +392,10 @@
                         <div class="mt-3 p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400 space-y-1.5">
                             <p class="text-slate-200 font-bold flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <span>Tips Agar Cepat Terbaca:</span>
+                                <span>Petunjuk Pemindaian QR Code:</span>
                             </p>
-                            <p class="leading-relaxed">• <strong>Kode Batang (1D):</strong> Sejajarkan garis kemasan dengan <strong>garis merah</strong>. Jaga jarak <strong>15–25 cm</strong> agar kamera fokus dan hindari silau pantulan lampu.</p>
-                            <p class="leading-relaxed">• <strong>QR Code (2D):</strong> Terpindai instan dari segala sudut kemiringan (360°).</p>
+                            <p class="leading-relaxed">• Posisikan QR Code di dalam <strong>kotak bidik hijau</strong>. Pemindaian berlangsung otomatis dan instan dari segala sudut kemiringan (360°).</p>
+                            <p class="leading-relaxed">• Jaga jarak <strong>15–30 cm</strong> agar kamera mengunci fokus tajam tanpa bayangan gelap.</p>
                         </div>
                     </div>
 
@@ -690,15 +704,11 @@
                         return;
                     }
 
-                    // 1. Explicit formats definition: Prioritize fast 1D retail barcodes and 2D QR codes
+                    // 1. Explicit formats definition: Prioritize fast 2D QR codes with fallback
                     const formats = window.Html5QrcodeSupportedFormats ? [
                         window.Html5QrcodeSupportedFormats.QR_CODE,
                         window.Html5QrcodeSupportedFormats.EAN_13,
                         window.Html5QrcodeSupportedFormats.CODE_128,
-                        window.Html5QrcodeSupportedFormats.CODE_39,
-                        window.Html5QrcodeSupportedFormats.UPC_A,
-                        window.Html5QrcodeSupportedFormats.UPC_E,
-                        window.Html5QrcodeSupportedFormats.EAN_8,
                     ] : undefined;
 
                     // 2. Hardware acceleration: enable native BarcodeDetector API if supported (Chrome Android / iOS 17+)
@@ -711,20 +721,20 @@
                     });
                     this.html5QrCode = html5QrCode;
 
-                    // 3. Responsive scanning box: wide aspect ratio optimized for 1D barcode while enclosing 2D QR
+                    // 3. Responsive square scanning box optimized for 2D QR Code
                     const qrboxFunction = (viewfinderWidth, viewfinderHeight) => {
-                        const width = Math.min(Math.floor(viewfinderWidth * 0.88), 360);
-                        const height = Math.min(Math.floor(viewfinderHeight * 0.60), 220);
+                        const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+                        const size = Math.min(Math.floor(minEdge * 0.72), 250);
                         return {
-                            width: Math.max(width, 250),
-                            height: Math.max(height, 140)
+                            width: Math.max(size, 200),
+                            height: Math.max(size, 200)
                         };
                     };
 
                     const config = {
                         fps: 25, // Higher frame sampling rate (25 FPS) to eliminate motion lag
                         qrbox: qrboxFunction,
-                        aspectRatio: 1.333333,
+                        aspectRatio: 1.0,
                         videoConstraints: {
                             facingMode: { ideal: "environment" },
                             width: { ideal: 1280, min: 640 },
@@ -757,7 +767,7 @@
                             // Frame miss is expected while user aligns camera
                         }
                     ).then(() => {
-                        this.scannerMessage = 'Kamera aktif. Posisikan barcode produk sejajar garis merah.';
+                        this.scannerMessage = 'Kamera aktif. Arahkan kotak bidik ke QR Code produk.';
 
                         // Check if flashlight / torch is supported by device camera
                         try {

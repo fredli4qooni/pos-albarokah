@@ -16,8 +16,8 @@
             <div class="flex items-center gap-2">
                 <a href="{{ route('products.barcode', $product) }}" target="_blank" 
                    class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 shadow-sm transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                    <span>Cetak Label Barcode</span>
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                    <span>Cetak Label QR Code</span>
                 </a>
                 <a href="{{ route('products.edit', $product) }}" 
                    class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition">
@@ -78,61 +78,30 @@
                         <span class="font-bold text-slate-800">{{ $product->code }}</span>
                     </div>
                     <div>
-                        <span class="text-slate-400">Barcode:</span>
-                        <span class="font-bold text-slate-800">{{ $product->barcode ?? '(Belum ada barcode fisik)' }}</span>
+                        <span class="text-slate-400">Kode QR:</span>
+                        <span class="font-bold text-slate-800">{{ $product->barcode ?: $product->code }}</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Barcode Label Preview Card -->
+        <!-- QR Code Label Preview Card -->
         <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
-            <h3 class="text-base font-bold text-slate-800 mb-3">Label Barcode Rak Toko</h3>
-            <p class="text-xs text-slate-500 mb-4">Gunakan label ini untuk ditempel pada botol herbisida, sak pupuk, atau rak display toko.</p>
+            <h3 class="text-base font-bold text-slate-800 mb-1">Label Stiker QR Code Rak Toko</h3>
+            <p class="text-xs text-slate-500 mb-4">Gunakan stiker QR Code ini untuk ditempel pada botol, karung pupuk, atau rak display toko agar kasir dapat memindai dengan kamera HP secara instan (360°).</p>
 
-            <div class="inline-block p-4 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 text-center">
+            <div class="inline-block p-4 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 text-center shadow-xs">
                 <div class="text-[10px] font-bold text-emerald-700 tracking-wider uppercase">TOKO PERTANIAN AL BAROKAH</div>
                 <div class="text-xs font-black text-slate-900 mt-0.5">{{ $product->name }}</div>
-                <div class="my-2.5 flex justify-center">
-                    <!-- SVG Barcode Representation -->
-                    <div class="bg-white p-2 border border-slate-200 rounded">
-                        <svg class="h-10 w-48 mx-auto" viewBox="0 0 200 40">
-                            <!-- Simulated clean barcode bars -->
-                            <rect x="10" y="5" width="3" height="30" fill="#0f172a"/>
-                            <rect x="16" y="5" width="2" height="30" fill="#0f172a"/>
-                            <rect x="22" y="5" width="4" height="30" fill="#0f172a"/>
-                            <rect x="29" y="5" width="1" height="30" fill="#0f172a"/>
-                            <rect x="33" y="5" width="3" height="30" fill="#0f172a"/>
-                            <rect x="40" y="5" width="2" height="30" fill="#0f172a"/>
-                            <rect x="46" y="5" width="4" height="30" fill="#0f172a"/>
-                            <rect x="54" y="5" width="2" height="30" fill="#0f172a"/>
-                            <rect x="60" y="5" width="3" height="30" fill="#0f172a"/>
-                            <rect x="66" y="5" width="1" height="30" fill="#0f172a"/>
-                            <rect x="70" y="5" width="5" height="30" fill="#0f172a"/>
-                            <rect x="78" y="5" width="2" height="30" fill="#0f172a"/>
-                            <rect x="84" y="5" width="3" height="30" fill="#0f172a"/>
-                            <rect x="91" y="5" width="2" height="30" fill="#0f172a"/>
-                            <rect x="97" y="5" width="4" height="30" fill="#0f172a"/>
-                            <rect x="105" y="5" width="1" height="30" fill="#0f172a"/>
-                            <rect x="110" y="5" width="3" height="30" fill="#0f172a"/>
-                            <rect x="116" y="5" width="2" height="30" fill="#0f172a"/>
-                            <rect x="122" y="5" width="4" height="30" fill="#0f172a"/>
-                            <rect x="130" y="5" width="2" height="30" fill="#0f172a"/>
-                            <rect x="136" y="5" width="3" height="30" fill="#0f172a"/>
-                            <rect x="142" y="5" width="1" height="30" fill="#0f172a"/>
-                            <rect x="147" y="5" width="4" height="30" fill="#0f172a"/>
-                            <rect x="155" y="5" width="2" height="30" fill="#0f172a"/>
-                            <rect x="160" y="5" width="3" height="30" fill="#0f172a"/>
-                            <rect x="167" y="5" width="2" height="30" fill="#0f172a"/>
-                            <rect x="173" y="5" width="4" height="30" fill="#0f172a"/>
-                            <rect x="180" y="5" width="2" height="30" fill="#0f172a"/>
-                        </svg>
-                        <div class="text-[10px] font-mono tracking-widest text-slate-600 mt-1">
+                <div class="my-3 flex justify-center">
+                    <div class="bg-white p-2.5 border border-slate-200 rounded-xl shadow-xs inline-block">
+                        {!! SimpleSoftwareIO\QrCode\Facades\QrCode::size(120)->margin(1)->generate($product->barcode ?: $product->code) !!}
+                        <div class="text-[11px] font-mono font-bold tracking-wider text-slate-700 mt-1.5">
                             {{ $product->barcode ?: $product->code }}
                         </div>
                     </div>
                 </div>
-                <div class="text-sm font-black text-slate-900">Rp {{ number_format($product->selling_price, 0, ',', '.') }}</div>
+                <div class="text-sm font-black text-slate-900">Rp {{ number_format($product->selling_price, 0, ',', '.') }} / {{ $product->unit }}</div>
             </div>
         </div>
 

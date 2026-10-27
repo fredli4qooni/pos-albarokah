@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <title>Cetak Barcode - {{ $product->name }}</title>
+    <title>Cetak Stiker QR Code - {{ $product->name }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,17 +11,22 @@
         }
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
         .btn-print {
-            padding: 8px 16px;
+            padding: 9px 18px;
             background-color: #059669;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
             font-size: 14px;
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+            transition: background 0.2s;
+        }
+        .btn-print:hover {
+            background-color: #047857;
         }
         .grid {
             display: grid;
@@ -33,40 +38,57 @@
         .sticker {
             background: white;
             border: 1px dashed #cbd5e1;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px 10px;
+            border-radius: 12px;
             text-align: center;
             box-sizing: border-box;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
         .store-name {
             font-size: 9px;
-            font-weight: bold;
+            font-weight: 800;
             color: #059669;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
         }
         .product-name {
             font-size: 11px;
             font-weight: bold;
             color: #0f172a;
-            margin: 4px 0;
+            margin: 4px 0 6px 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            max-width: 220px;
         }
-        .barcode-box {
-            margin: 6px 0;
+        .qr-box {
+            margin: 4px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        .barcode-code {
+        .qr-box svg {
+            width: 76px;
+            height: 76px;
+        }
+        .qr-code-text {
             font-family: monospace;
             font-size: 10px;
-            letter-spacing: 2px;
+            font-weight: bold;
+            letter-spacing: 1px;
             color: #334155;
+            margin-top: 4px;
         }
         .price {
             font-size: 13px;
             font-weight: 900;
             color: #0f172a;
+            margin-top: 4px;
         }
         @media print {
             .header {
@@ -83,6 +105,7 @@
             .sticker {
                 border: 1px solid #cbd5e1;
                 page-break-inside: avoid;
+                box-shadow: none;
             }
         }
     </style>
@@ -90,9 +113,9 @@
 <body>
 
     <div class="header">
-        <h2>Lembar Cetak Label Barcode Produk</h2>
-        <p style="font-size: 13px; color: #64748b; margin-top: 4px;">Tempelkan stiker ini pada rak display atau kemasan fisik produk.</p>
-        <button class="btn-print" onclick="window.print()">🖨️ Cetak / Print Stiker</button>
+        <h2 style="margin: 0 0 6px 0; color: #0f172a;">Lembar Cetak Stiker QR Code Produk</h2>
+        <p style="font-size: 13px; color: #64748b; margin: 0 0 16px 0;">Cetak dan tempelkan stiker QR Code ini pada rak display atau kemasan fisik produk untuk pemindaian kasir.</p>
+        <button class="btn-print" onclick="window.print()">🖨️ Cetak / Print Stiker QR Code</button>
     </div>
 
     <div class="grid">
@@ -100,45 +123,9 @@
             <div class="sticker">
                 <div class="store-name">Toko Pertanian Al Barokah</div>
                 <div class="product-name" title="{{ $product->name }}">{{ $product->name }}</div>
-                <div class="barcode-box">
-                    <svg style="height: 36px; width: 100%;" viewBox="0 0 160 36">
-                        <rect x="5" y="2" width="2" height="30" fill="#000"/>
-                        <rect x="9" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="12" y="2" width="3" height="30" fill="#000"/>
-                        <rect x="17" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="20" y="2" width="2" height="30" fill="#000"/>
-                        <rect x="25" y="2" width="3" height="30" fill="#000"/>
-                        <rect x="30" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="33" y="2" width="4" height="30" fill="#000"/>
-                        <rect x="39" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="43" y="2" width="2" height="30" fill="#000"/>
-                        <rect x="47" y="2" width="3" height="30" fill="#000"/>
-                        <rect x="52" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="55" y="2" width="4" height="30" fill="#000"/>
-                        <rect x="61" y="2" width="2" height="30" fill="#000"/>
-                        <rect x="65" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="68" y="2" width="3" height="30" fill="#000"/>
-                        <rect x="73" y="2" width="2" height="30" fill="#000"/>
-                        <rect x="77" y="2" width="4" height="30" fill="#000"/>
-                        <rect x="83" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="86" y="2" width="3" height="30" fill="#000"/>
-                        <rect x="91" y="2" width="2" height="30" fill="#000"/>
-                        <rect x="95" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="98" y="2" width="4" height="30" fill="#000"/>
-                        <rect x="104" y="2" width="2" height="30" fill="#000"/>
-                        <rect x="108" y="2" width="3" height="30" fill="#000"/>
-                        <rect x="113" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="116" y="2" width="3" height="30" fill="#000"/>
-                        <rect x="121" y="2" width="2" height="30" fill="#000"/>
-                        <rect x="125" y="2" width="4" height="30" fill="#000"/>
-                        <rect x="131" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="134" y="2" width="2" height="30" fill="#000"/>
-                        <rect x="138" y="2" width="3" height="30" fill="#000"/>
-                        <rect x="143" y="2" width="1" height="30" fill="#000"/>
-                        <rect x="146" y="2" width="4" height="30" fill="#000"/>
-                        <rect x="152" y="2" width="2" height="30" fill="#000"/>
-                    </svg>
-                    <div class="barcode-code">{{ $product->barcode ?: $product->code }}</div>
+                <div class="qr-box">
+                    {!! SimpleSoftwareIO\QrCode\Facades\QrCode::size(76)->margin(1)->generate($product->barcode ?: $product->code) !!}
+                    <div class="qr-code-text">{{ $product->barcode ?: $product->code }}</div>
                 </div>
                 <div class="price">Rp {{ number_format($product->selling_price, 0, ',', '.') }} / {{ $product->unit }}</div>
             </div>

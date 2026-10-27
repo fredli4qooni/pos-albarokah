@@ -104,14 +104,15 @@
                             <x-input-error :messages="$errors->get('code')" class="mt-1.5" />
                         </div>
 
-                        <!-- Barcode -->
+                        <!-- Kode QR / Nilai Barcode -->
                         <div>
                             <label for="barcode" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                                Kode Barcode Fisik (Opsional)
+                                Kode QR / Barcode Produk (Opsional)
                             </label>
                             <input id="barcode" type="text" name="barcode" value="{{ old('barcode') }}" 
-                                   placeholder="Contoh: 8991234001011 (Bisa discan nanti)" 
+                                   placeholder="Contoh: 8991234001011 (Kosongkan jika ingin disamakan dengan SKU)" 
                                    class="block w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition" />
+                            <p class="text-[11px] text-slate-400 mt-1">Jika dikosongkan, stiker kode QR akan otomatis dicetak mengikuti Kode SKU produk.</p>
                             <x-input-error :messages="$errors->get('barcode')" class="mt-1.5" />
                         </div>
                     </div>
