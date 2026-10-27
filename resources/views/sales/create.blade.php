@@ -337,16 +337,26 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-1.5">
+                            <!-- Mirror / Flip Toggle Button (Front Cam / Laptop) -->
+                            <button @click="toggleMirror()" 
+                                    type="button" 
+                                    :class="isMirrored ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 ring-1 ring-emerald-500/50' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'"
+                                    class="px-2.5 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition"
+                                    :title="isMirrored ? 'Matikan Efek Cermin' : 'Aktifkan Efek Cermin (Kamera Depan Laptop)'">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                                <span class="text-[11px]" x-text="isMirrored ? 'Cermin: ON' : 'Cermin: OFF'"></span>
+                            </button>
+
                             <!-- Torch Button if supported -->
                             <button x-show="hasTorch" 
                                     @click="toggleTorch()" 
                                     type="button" 
-                                    :class="isTorchOn ? 'bg-amber-100 text-amber-800 border-amber-300 ring-2 ring-amber-400' : 'bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200'"
+                                    :class="isTorchOn ? 'bg-amber-100 text-amber-800 border-amber-300 ring-2 ring-amber-400' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'"
                                     class="p-2 rounded-xl border text-xs font-bold flex items-center gap-1 transition"
                                     title="Nyalakan/Matikan Senter Flash">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             </button>
-                            <button @click="closeScannerModal()" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-xl hover:bg-slate-100 transition">
+                            <button @click="closeScannerModal()" type="button" class="text-slate-400 hover:text-slate-200 p-1.5 rounded-xl hover:bg-slate-800 transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                             </button>
                         </div>
@@ -355,9 +365,10 @@
                     <!-- Viewfinder Container with Square QR Reticle -->
                     <div class="p-4 bg-slate-950">
                         <div class="relative w-full rounded-2xl overflow-hidden bg-black text-white min-h-[300px] sm:min-h-[360px] flex items-center justify-center border border-slate-800">
-                            <!-- High-Performance Direct Video Stream -->
+                            <!-- High-Performance Direct Video Stream with Mirror Support -->
                             <video x-ref="videoElement" 
-                                   class="w-full h-full object-cover min-h-[300px] sm:min-h-[360px]" 
+                                   class="w-full h-full object-cover min-h-[300px] sm:min-h-[360px] transition-transform duration-200" 
+                                   :class="isMirrored ? '-scale-x-100' : ''"
                                    playsinline 
                                    autoplay 
                                    muted>
@@ -436,9 +447,10 @@
                         <div class="mt-2.5 p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400 space-y-1">
                             <p class="text-slate-200 font-bold flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <span>Petunjuk Pemindaian:</span>
+                                <span>Petunjuk & Dukungan Kamera Depan (Laptop):</span>
                             </p>
-                            <p class="leading-relaxed">• Arahkan QR Code ke dalam kotak bidik. Kamera membaca otomatis dari segala sudut (360°).</p>
+                            <p class="leading-relaxed">• Sistem dilengkapi <strong>Auto-Detect Dual Orientation</strong> — otomatis mendeteksi QR Code posisi normal maupun terbalik (efek mirror webcam laptop).</p>
+                            <p class="leading-relaxed">• Tekan tombol <strong>Cermin</strong> di kanan atas jika ingin membalik pratinjau kamera agar gerakan tangan terasa natural seperti cermin.</p>
                             <p class="leading-relaxed">• Anda juga bisa memindai dengan <strong>Barcode Scanner Gun (USB / Nirkabel)</strong> langsung di kasir tanpa membuka popup ini.</p>
                         </div>
                     </div>
@@ -592,6 +604,7 @@
                 scanFeedback: null,
                 hasTorch: false,
                 isTorchOn: false,
+                isMirrored: false,
                 availableCameras: [],
                 selectedCameraId: null,
 
@@ -809,6 +822,11 @@
                     this.scannerModalOpen = false;
                 },
 
+                toggleMirror() {
+                    this.isMirrored = !this.isMirrored;
+                    this.showNotification('info', this.isMirrored ? 'Mode Cermin (Mirror) Diaktifkan' : 'Mode Cermin (Mirror) Dinonaktifkan');
+                },
+
                 stopCameraStream() {
                     this.isScanningActive = false;
                     if (this.animFrameId) {
@@ -873,14 +891,19 @@
                         this.scannerMessage = 'Arahkan kamera ke QR Code (Deteksi Instan)';
                         this.isScanningActive = true;
 
-                        // Check torch support & continuous autofocus
+                        // Check torch support, continuous autofocus, & front camera detection
                         const track = stream.getVideoTracks()[0];
                         if (track) {
                             try {
                                 const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+                                const settings = track.getSettings ? track.getSettings() : {};
                                 this.hasTorch = Boolean(capabilities && capabilities.torch);
                                 if (capabilities.focusMode && capabilities.focusMode.includes('continuous')) {
                                     await track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] });
+                                }
+                                const isUserFacing = settings.facingMode === 'user' || /front|user|depan|integrated|face/i.test(track.label || '');
+                                if (isUserFacing && !this.selectedCameraId) {
+                                    this.isMirrored = true;
                                 }
                             } catch(e) {
                                 this.hasTorch = false;
@@ -919,23 +942,58 @@
                                 } catch(e) {}
                             }
 
-                            // Engine 2: Ultra-Fast Canvas jsQR (< 6ms execution)
-                            if (!foundText && window.jsQR && canvas) {
+                            // Engine 2: Ultra-Fast Canvas jsQR with Dual-Orientation (Normal + Mirrored for laptop webcams)
+                            if (!foundText && canvas) {
                                 try {
                                     const ctx = canvas.getContext('2d', { willReadFrequently: true });
-                                    // Downscale width to max 480px for lightning-fast sub-10ms decoding
+                                    // Scale to max 640px for ideal balance of crisp edges & sub-10ms performance
                                     const maxDim = Math.max(video.videoWidth, video.videoHeight);
-                                    const scale = maxDim > 480 ? (480 / maxDim) : 1.0;
+                                    const scale = maxDim > 640 ? (640 / maxDim) : 1.0;
                                     const w = Math.round(video.videoWidth * scale);
                                     const h = Math.round(video.videoHeight * scale);
 
-                                    canvas.width = w;
-                                    canvas.height = h;
-                                    ctx.drawImage(video, 0, 0, w, h);
-                                    const imgData = ctx.getImageData(0, 0, w, h);
-                                    const qr = window.jsQR(imgData.data, w, h, { inversionAttempts: "dontInvert" });
-                                    if (qr && qr.data) {
-                                        foundText = qr.data;
+                                    if (canvas.width !== w || canvas.height !== h) {
+                                        canvas.width = w;
+                                        canvas.height = h;
+                                    }
+
+                                    // Orientation scanner helper (flipHorizontal = true mirrors the image horizontally)
+                                    const scanOrientation = (flipHorizontal) => {
+                                        ctx.save();
+                                        ctx.clearRect(0, 0, w, h);
+                                        if (flipHorizontal) {
+                                            ctx.translate(w, 0);
+                                            ctx.scale(-1, 1);
+                                        }
+                                        ctx.drawImage(video, 0, 0, w, h);
+                                        ctx.restore();
+
+                                        if (window.jsQR) {
+                                            const imgData = ctx.getImageData(0, 0, w, h);
+                                            const qr = window.jsQR(imgData.data, w, h, { inversionAttempts: "dontInvert" });
+                                            if (qr && qr.data) {
+                                                return qr.data;
+                                            }
+                                        }
+                                        return null;
+                                    };
+
+                                    // Pass 1: Try current preview orientation (mirrored first if isMirrored is ON, else normal)
+                                    foundText = scanOrientation(this.isMirrored);
+
+                                    // Pass 2: If not found, immediately try opposite orientation (catches mirrored laptop webcam feed)
+                                    if (!foundText) {
+                                        foundText = scanOrientation(!this.isMirrored);
+
+                                        // Pass 3: Test hardware detector on flipped canvas if available
+                                        if (!foundText && this.hardwareDetector) {
+                                            try {
+                                                const codes = await this.hardwareDetector.detect(canvas);
+                                                if (codes && codes.length > 0 && codes[0].rawValue) {
+                                                    foundText = codes[0].rawValue;
+                                                }
+                                            } catch(e) {}
+                                        }
                                     }
                                 } catch(e) {}
                             }
@@ -989,10 +1047,28 @@
                                 const targetH = Math.round(img.height * scale);
                                 canvas.width = targetW;
                                 canvas.height = targetH;
+
+                                // Pass 1: Normal orientation
                                 ctx.clearRect(0, 0, targetW, targetH);
                                 ctx.drawImage(img, 0, 0, targetW, targetH);
-                                const imgData = ctx.getImageData(0, 0, targetW, targetH);
-                                const result = window.jsQR(imgData.data, targetW, targetH, {
+                                let imgData = ctx.getImageData(0, 0, targetW, targetH);
+                                let result = window.jsQR(imgData.data, targetW, targetH, {
+                                    inversionAttempts: "attemptBoth"
+                                });
+                                if (result && result.data) {
+                                    decodedCode = result.data;
+                                    break;
+                                }
+
+                                // Pass 2: Horizontally flipped / mirrored orientation (catches selfie/webcam photos)
+                                ctx.save();
+                                ctx.clearRect(0, 0, targetW, targetH);
+                                ctx.translate(targetW, 0);
+                                ctx.scale(-1, 1);
+                                ctx.drawImage(img, 0, 0, targetW, targetH);
+                                ctx.restore();
+                                imgData = ctx.getImageData(0, 0, targetW, targetH);
+                                result = window.jsQR(imgData.data, targetW, targetH, {
                                     inversionAttempts: "attemptBoth"
                                 });
                                 if (result && result.data) {
