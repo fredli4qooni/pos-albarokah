@@ -94,9 +94,9 @@
                 <div class="text-[10px] font-bold text-emerald-700 tracking-wider uppercase">TOKO PERTANIAN AL BAROKAH</div>
                 <div class="text-xs font-black text-slate-900 mt-0.5">{{ $product->name }}</div>
                 <div class="my-3 flex justify-center">
-                    <div class="bg-white p-2.5 border border-slate-200 rounded-xl shadow-xs inline-block">
-                        {!! SimpleSoftwareIO\QrCode\Facades\QrCode::size(120)->margin(1)->generate($product->barcode ?: $product->code) !!}
-                        <div class="text-[11px] font-mono font-bold tracking-wider text-slate-700 mt-1.5">
+                    <div class="bg-white p-3 border border-slate-200 rounded-2xl shadow-xs inline-block">
+                        {!! SimpleSoftwareIO\QrCode\Facades\QrCode::size(140)->margin(3)->generate($product->barcode ?: $product->code) !!}
+                        <div class="text-[11px] font-mono font-bold tracking-wider text-slate-700 mt-2">
                             {{ $product->barcode ?: $product->code }}
                         </div>
                     </div>

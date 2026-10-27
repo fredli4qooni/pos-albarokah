@@ -890,23 +890,88 @@
                     const file = event.target.files && event.target.files[0];
                     if (!file) return;
 
-                    if (!this.html5QrCode) {
-                        this.html5QrCode = new window.Html5Qrcode("reader", { verbose: false });
+                    this.scannerMessage = 'Membaca QR Code dari berkas gambar...';
+
+                    // 1. Safely stop active camera scan if running (Html5Qrcode requires camera stopped before scanFile)
+                    if (this.html5QrCode) {
+                        try {
+                            if (this.html5QrCode.isScanning) {
+                                await this.html5QrCode.stop();
+                            }
+                            this.html5QrCode.clear();
+                        } catch (e) {
+                            console.warn('Camera stop before file scan error:', e);
+                        }
                     }
 
-                    this.scannerMessage = 'Membaca QR Code dari berkas gambar...';
+                    let decodedCode = null;
+
+                    // 2. Engine 1: Client-side Canvas Image + jsQR (supports multi-scale downsampling for high-res photos)
                     try {
-                        const decodedText = await this.html5QrCode.scanFile(file, true);
-                        if (decodedText) {
-                            this.onBarcodeScanned(decodedText);
+                        const img = new Image();
+                        const objectUrl = URL.createObjectURL(file);
+                        await new Promise((resolve, reject) => {
+                            img.onload = resolve;
+                            img.onerror = reject;
+                            img.src = objectUrl;
+                        });
+
+                        if (window.jsQR) {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                            
+                            // Multi-scale passes: original size, 1000px, 600px
+                            const scales = [1.0];
+                            const maxDim = Math.max(img.width, img.height);
+                            if (maxDim > 1000) scales.push(1000 / maxDim);
+                            if (maxDim > 600) scales.push(600 / maxDim);
+
+                            for (const scale of scales) {
+                                const targetW = Math.round(img.width * scale);
+                                const targetH = Math.round(img.height * scale);
+                                canvas.width = targetW;
+                                canvas.height = targetH;
+                                ctx.clearRect(0, 0, targetW, targetH);
+                                ctx.drawImage(img, 0, 0, targetW, targetH);
+                                const imgData = ctx.getImageData(0, 0, targetW, targetH);
+                                const result = window.jsQR(imgData.data, targetW, targetH, {
+                                    inversionAttempts: "attemptBoth"
+                                });
+                                if (result && result.data) {
+                                    decodedCode = result.data;
+                                    break;
+                                }
+                            }
                         }
+                        URL.revokeObjectURL(objectUrl);
                     } catch (err) {
-                        console.warn('File QR decode error:', err);
+                        console.warn('jsQR scan attempt failed:', err);
+                    }
+
+                    // 3. Engine 2: Html5Qrcode.scanFile fallback if jsQR did not detect
+                    if (!decodedCode) {
+                        try {
+                            if (!this.html5QrCode) {
+                                this.html5QrCode = new window.Html5Qrcode("reader", { verbose: false });
+                            }
+                            const text = await this.html5QrCode.scanFile(file, true);
+                            if (text) {
+                                decodedCode = text;
+                            }
+                        } catch (err) {
+                            console.warn('Html5Qrcode file scan fallback error:', err);
+                        }
+                    }
+
+                    // 4. Handle Result
+                    if (decodedCode) {
+                        this.onBarcodeScanned(decodedCode);
+                    } else {
                         this.scannerMessage = 'QR Code tidak terdeteksi pada gambar.';
                         this.showNotification('warning', 'QR Code tidak terdeteksi pada berkas gambar yang dipilih.');
-                    } finally {
-                        event.target.value = '';
                     }
+
+                    event.target.value = '';
                 },
 
                 toggleTorch() {

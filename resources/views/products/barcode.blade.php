@@ -73,8 +73,8 @@
             justify-content: center;
         }
         .qr-box svg {
-            width: 76px;
-            height: 76px;
+            width: 86px;
+            height: 86px;
         }
         .qr-code-text {
             font-family: monospace;
@@ -124,7 +124,7 @@
                 <div class="store-name">Toko Pertanian Al Barokah</div>
                 <div class="product-name" title="{{ $product->name }}">{{ $product->name }}</div>
                 <div class="qr-box">
-                    {!! SimpleSoftwareIO\QrCode\Facades\QrCode::size(76)->margin(1)->generate($product->barcode ?: $product->code) !!}
+                    {!! SimpleSoftwareIO\QrCode\Facades\QrCode::size(86)->margin(3)->generate($product->barcode ?: $product->code) !!}
                     <div class="qr-code-text">{{ $product->barcode ?: $product->code }}</div>
                 </div>
                 <div class="price">Rp {{ number_format($product->selling_price, 0, ',', '.') }} / {{ $product->unit }}</div>
