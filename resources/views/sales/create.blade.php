@@ -354,48 +354,80 @@
 
                     <!-- Viewfinder Container with Square QR Reticle -->
                     <div class="p-4 bg-slate-950">
-                        <div class="relative w-full rounded-2xl overflow-hidden bg-black text-white min-h-[280px] flex items-center justify-center border border-slate-800">
+                        <div class="relative w-full rounded-2xl overflow-hidden bg-black text-white min-h-[290px] flex items-center justify-center border border-slate-800">
                             <div id="reader" class="w-full"></div>
                             
                             <!-- Square QR Aiming Reticle (4 corner brackets) -->
                             <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
-                                <div class="relative w-48 h-48 sm:w-56 sm:h-56">
+                                <div class="relative w-52 h-52 sm:w-60 sm:h-60 transition-all duration-200">
                                     <!-- Top-Left Corner -->
-                                    <div class="absolute top-0 left-0 w-7 h-7 border-t-4 border-l-4 border-emerald-400 rounded-tl-lg shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                    <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 rounded-tl-xl transition-all duration-200"
+                                         :class="scanFeedback ? (scanFeedback.success ? 'border-emerald-400 shadow-[0_0_15px_rgba(52,211,153,1)]' : 'border-rose-400 shadow-[0_0_15px_rgba(251,113,133,1)]') : 'border-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]'"></div>
                                     <!-- Top-Right Corner -->
-                                    <div class="absolute top-0 right-0 w-7 h-7 border-t-4 border-r-4 border-emerald-400 rounded-tr-lg shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                    <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 rounded-tr-xl transition-all duration-200"
+                                         :class="scanFeedback ? (scanFeedback.success ? 'border-emerald-400 shadow-[0_0_15px_rgba(52,211,153,1)]' : 'border-rose-400 shadow-[0_0_15px_rgba(251,113,133,1)]') : 'border-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]'"></div>
                                     <!-- Bottom-Left Corner -->
-                                    <div class="absolute bottom-0 left-0 w-7 h-7 border-b-4 border-l-4 border-emerald-400 rounded-bl-lg shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                    <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 rounded-bl-xl transition-all duration-200"
+                                         :class="scanFeedback ? (scanFeedback.success ? 'border-emerald-400 shadow-[0_0_15px_rgba(52,211,153,1)]' : 'border-rose-400 shadow-[0_0_15px_rgba(251,113,133,1)]') : 'border-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]'"></div>
                                     <!-- Bottom-Right Corner -->
-                                    <div class="absolute bottom-0 right-0 w-7 h-7 border-b-4 border-r-4 border-emerald-400 rounded-br-lg shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                    <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 rounded-br-xl transition-all duration-200"
+                                         :class="scanFeedback ? (scanFeedback.success ? 'border-emerald-400 shadow-[0_0_15px_rgba(52,211,153,1)]' : 'border-rose-400 shadow-[0_0_15px_rgba(251,113,133,1)]') : 'border-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]'"></div>
                                     
                                     <!-- Center Scanning Line Indicator -->
-                                    <div class="absolute inset-x-2 top-1/2 -translate-y-1/2 h-0.5 bg-emerald-400 shadow-[0_0_10px_2px_rgba(52,211,153,0.9)] animate-pulse"></div>
+                                    <div x-show="!scanFeedback" class="absolute inset-x-2 top-1/2 -translate-y-1/2 h-0.5 bg-emerald-400 shadow-[0_0_10px_2px_rgba(52,211,153,0.9)] animate-pulse"></div>
+
+                                    <!-- Scanned Success Checkmark Overlay -->
+                                    <div x-show="scanFeedback && scanFeedback.success" class="absolute inset-0 flex items-center justify-center bg-emerald-950/40 rounded-xl backdrop-blur-xs">
+                                        <div class="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg">
+                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Camera Switcher (for devices with multiple lenses) -->
-                        <div x-show="availableCameras.length > 1" class="mt-2.5 flex items-center justify-between text-xs text-slate-400">
-                            <span class="text-[11px]">Pilih Lensa:</span>
-                            <select @change="switchCamera($event.target.value)" 
-                                    class="bg-slate-900 border border-slate-800 text-slate-300 text-[11px] rounded-lg px-2 py-1 focus:ring-1 focus:ring-emerald-500">
-                                <template x-for="cam in availableCameras" :key="cam.id">
-                                    <option :value="cam.id" :selected="cam.id === selectedCameraId" x-text="cam.label || 'Kamera ' + cam.id"></option>
-                                </template>
-                            </select>
+                        <!-- Scan Feedback Banner -->
+                        <div x-show="scanFeedback" 
+                             x-cloak
+                             class="mt-2.5 p-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition"
+                             :class="scanFeedback?.success ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'">
+                            <span x-text="scanFeedback?.text"></span>
                         </div>
 
-                        <p class="text-center text-xs text-slate-300 mt-2.5 font-medium" x-text="scannerMessage || 'Mempersiapkan kamera...'"></p>
+                        <!-- Camera Switcher & File Upload Alternative -->
+                        <div class="mt-3 flex items-center justify-between text-xs text-slate-400 gap-2">
+                            <div class="flex items-center gap-1.5 overflow-hidden">
+                                <span class="text-[11px] whitespace-nowrap">Lensa:</span>
+                                <select x-show="availableCameras.length > 0" 
+                                        @change="switchCamera($event.target.value)" 
+                                        class="bg-slate-900 border border-slate-800 text-slate-300 text-[11px] rounded-lg px-2 py-1 max-w-[150px] truncate focus:ring-1 focus:ring-emerald-500">
+                                    <template x-for="cam in availableCameras" :key="cam.id">
+                                        <option :value="cam.id" :selected="cam.id === selectedCameraId" x-text="cam.label || 'Kamera ' + cam.id.substring(0,6)"></option>
+                                    </template>
+                                </select>
+                                <span x-show="availableCameras.length === 0" class="text-[11px] text-slate-500 italic">Kamera Default</span>
+                            </div>
+
+                            <!-- Scan File Upload Button -->
+                            <div>
+                                <label class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-slate-700 text-[11px] font-medium transition" title="Pilih berkas foto/gambar QR Code jika tidak menggunakan kamera live">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    <span>Scan Berkas Foto QR</span>
+                                    <input type="file" accept="image/*" class="hidden" @change="scanQrFromFile($event)">
+                                </label>
+                            </div>
+                        </div>
+
+                        <p class="text-center text-xs text-slate-300 mt-2 font-medium" x-text="scannerMessage || 'Mempersiapkan kamera...'"></p>
 
                         <!-- Scanning Tips Guide -->
-                        <div class="mt-3 p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400 space-y-1.5">
+                        <div class="mt-2.5 p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400 space-y-1">
                             <p class="text-slate-200 font-bold flex items-center gap-1.5">
                                 <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <span>Petunjuk Pemindaian QR Code:</span>
+                                <span>Petunjuk Pemindaian:</span>
                             </p>
-                            <p class="leading-relaxed">• Posisikan QR Code di dalam <strong>kotak bidik hijau</strong>. Pemindaian berlangsung otomatis dan instan dari segala sudut kemiringan (360°).</p>
-                            <p class="leading-relaxed">• Jaga jarak <strong>15–30 cm</strong> agar kamera mengunci fokus tajam tanpa bayangan gelap.</p>
+                            <p class="leading-relaxed">• Arahkan QR Code ke dalam kotak bidik. Kamera membaca otomatis dari segala sudut (360°).</p>
+                            <p class="leading-relaxed">• Anda juga bisa memindai dengan <strong>Barcode Scanner Gun (USB / Nirkabel)</strong> langsung di kasir tanpa membuka popup ini.</p>
                         </div>
                     </div>
 
@@ -541,6 +573,7 @@
                 scannerModalOpen: false,
                 html5QrCode: null,
                 scannerMessage: '',
+                scanFeedback: null,
                 hasTorch: false,
                 isTorchOn: false,
                 availableCameras: [],
@@ -554,6 +587,47 @@
                 // Success Modal
                 successModalOpen: false,
                 lastSaleResult: null,
+
+                init() {
+                    // Global physical barcode scanner listener (HID keyboard mode)
+                    let barcodeBuffer = '';
+                    let lastKeyTime = Date.now();
+
+                    window.addEventListener('keydown', (e) => {
+                        const activeEl = document.activeElement;
+                        const isOtherInput = activeEl && (
+                            (activeEl.tagName === 'INPUT' && activeEl !== this.$refs.searchInput) || 
+                            activeEl.tagName === 'TEXTAREA' || 
+                            activeEl.tagName === 'SELECT'
+                        );
+
+                        // Don't intercept if user is typing into modal inputs or other form fields
+                        if (isOtherInput || this.customerModalOpen || this.successModalOpen) {
+                            return;
+                        }
+
+                        const currentTime = Date.now();
+                        // Physical scanners emit keypresses within 20-60ms intervals
+                        if (currentTime - lastKeyTime > 100) {
+                            barcodeBuffer = '';
+                        }
+                        lastKeyTime = currentTime;
+
+                        if (e.key === 'Enter') {
+                            const code = barcodeBuffer.trim();
+                            if (code.length >= 2) {
+                                e.preventDefault();
+                                this.onBarcodeScanned(code);
+                                barcodeBuffer = '';
+                                if (this.$refs.searchInput) {
+                                    this.searchQuery = '';
+                                }
+                            }
+                        } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                            barcodeBuffer += e.key;
+                        }
+                    });
+                },
 
                 get filteredProducts() {
                     let list = this.products;
@@ -589,10 +663,32 @@
                 },
 
                 handleSearchEnter() {
+                    const q = this.searchQuery.trim();
+                    if (!q) return;
+
+                    // 1. Direct match on barcode or code across all products
+                    const exactMatch = this.products.find(p => 
+                        (p.barcode && String(p.barcode).trim().toLowerCase() === q.toLowerCase()) || 
+                        (p.code && String(p.code).trim().toLowerCase() === q.toLowerCase())
+                    );
+
+                    if (exactMatch) {
+                        this.addToCart(exactMatch);
+                        this.showNotification('success', '✓ ' + exactMatch.name + ' berhasil ditambahkan.');
+                        this.searchQuery = '';
+                        return;
+                    }
+
+                    // 2. Filtered list match
                     const filtered = this.filteredProducts;
                     if (filtered.length === 1) {
                         this.addToCart(filtered[0]);
+                        this.showNotification('success', '✓ ' + filtered[0].name + ' berhasil ditambahkan.');
                         this.searchQuery = '';
+                    } else if (filtered.length > 1) {
+                        this.showNotification('info', 'Ditemukan ' + filtered.length + ' produk. Klik salah satu untuk memilih.');
+                    } else {
+                        this.showNotification('warning', 'Produk dengan kode/nama "' + q + '" tidak ditemukan.');
                     }
                 },
 
@@ -672,7 +768,8 @@
 
                 openScannerModal() {
                     this.scannerModalOpen = true;
-                    this.scannerMessage = 'Menghidupkan kamera...';
+                    this.scannerMessage = 'Mempersiapkan kamera...';
+                    this.scanFeedback = null;
                     this.isTorchOn = false;
 
                     this.$nextTick(() => {
@@ -680,51 +777,75 @@
                     });
                 },
 
-                closeScannerModal() {
+                async closeScannerModal() {
                     if (this.html5QrCode) {
-                        this.html5QrCode.stop().then(() => {
+                        try {
+                            if (this.html5QrCode.isScanning) {
+                                await this.html5QrCode.stop();
+                            }
                             this.html5QrCode.clear();
-                            this.html5QrCode = null;
-                            this.isTorchOn = false;
-                            this.scannerModalOpen = false;
-                        }).catch(err => {
+                        } catch (err) {
                             console.warn('Scanner stop error:', err);
+                        } finally {
                             this.html5QrCode = null;
-                            this.isTorchOn = false;
-                            this.scannerModalOpen = false;
-                        });
-                    } else {
-                        this.scannerModalOpen = false;
+                        }
                     }
+                    this.isTorchOn = false;
+                    this.scanFeedback = null;
+                    this.scannerModalOpen = false;
                 },
 
-                initHtml5QrCode() {
+                async initHtml5QrCode() {
                     if (!window.Html5Qrcode) {
-                        this.scannerMessage = 'Library barcode scanner belum siap.';
+                        this.scannerMessage = 'Library pemindai barcode belum siap.';
+                        this.showNotification('error', 'Library pemindai kamera belum termuat.');
                         return;
                     }
 
-                    // 1. Explicit formats definition: Prioritize fast 2D QR codes with fallback
-                    const formats = window.Html5QrcodeSupportedFormats ? [
-                        window.Html5QrcodeSupportedFormats.QR_CODE,
-                        window.Html5QrcodeSupportedFormats.EAN_13,
-                        window.Html5QrcodeSupportedFormats.CODE_128,
-                    ] : undefined;
+                    // Clean up any existing scanner instance first
+                    if (this.html5QrCode) {
+                        try {
+                            if (this.html5QrCode.isScanning) {
+                                await this.html5QrCode.stop();
+                            }
+                            this.html5QrCode.clear();
+                        } catch (e) {}
+                        this.html5QrCode = null;
+                    }
 
-                    // 2. Hardware acceleration: enable native BarcodeDetector API if supported (Chrome Android / iOS 17+)
+                    // Enumerate video cameras
+                    let cameras = [];
+                    try {
+                        cameras = await window.Html5Qrcode.getCameras();
+                    } catch (err) {
+                        console.warn('Could not enumerate cameras:', err);
+                    }
+                    this.availableCameras = cameras || [];
+
+                    // Select camera: preferred selected, then back camera, then first available
+                    let cameraTarget = null;
+                    if (this.selectedCameraId && this.availableCameras.some(c => c.id === this.selectedCameraId)) {
+                        cameraTarget = { deviceId: { exact: this.selectedCameraId } };
+                    } else if (this.availableCameras.length > 0) {
+                        const backCam = this.availableCameras.find(c => /back|rear|environment|belakang/i.test(c.label));
+                        const targetCam = backCam || this.availableCameras[0];
+                        this.selectedCameraId = targetCam.id;
+                        cameraTarget = { deviceId: { exact: targetCam.id } };
+                    } else {
+                        // Fallback constraint: ideal environment camera (does not throw OverconstrainedError if desktop)
+                        cameraTarget = { facingMode: { ideal: "environment" } };
+                    }
+
+                    // Create pure ZXing scanner without problematic experimental features
                     const html5QrCode = new window.Html5Qrcode("reader", {
-                        formatsToSupport: formats,
-                        verbose: false,
-                        experimentalFeatures: {
-                            useBarCodeDetectorIfSupported: true
-                        }
+                        verbose: false
                     });
                     this.html5QrCode = html5QrCode;
 
-                    // 3. Responsive square scanning box optimized for 2D QR Code
+                    // Responsive square scanning box optimized for 2D QR Code
                     const qrboxFunction = (viewfinderWidth, viewfinderHeight) => {
                         const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-                        const size = Math.min(Math.floor(minEdge * 0.72), 250);
+                        const size = Math.min(Math.floor(minEdge * 0.82), 300);
                         return {
                             width: Math.max(size, 200),
                             height: Math.max(size, 200)
@@ -732,54 +853,60 @@
                     };
 
                     const config = {
-                        fps: 25, // Higher frame sampling rate (25 FPS) to eliminate motion lag
+                        fps: 12, // 10-15 FPS is optimal for CPU matrix decoding
                         qrbox: qrboxFunction,
-                        aspectRatio: 1.0,
-                        videoConstraints: {
-                            facingMode: { ideal: "environment" },
-                            width: { ideal: 1280, min: 640 },
-                            height: { ideal: 720, min: 480 }
-                        }
+                        disableFlip: false
                     };
 
-                    // Detect multiple back cameras if device has them
-                    window.Html5Qrcode.getCameras().then(cameras => {
-                        if (cameras && cameras.length > 0) {
-                            this.availableCameras = cameras;
-                            if (!this.selectedCameraId) {
-                                const backCam = cameras.find(c => /back|rear|environment|belakang/i.test(c.label));
-                                this.selectedCameraId = backCam ? backCam.id : cameras[0].id;
+                    try {
+                        await html5QrCode.start(
+                            cameraTarget,
+                            config,
+                            (decodedText) => {
+                                this.onBarcodeScanned(decodedText);
+                            },
+                            (errorMessage) => {
+                                // Frame tick while aligning
                             }
-                        }
-                    }).catch(() => {
-                        // ignore camera query error, fallback to facingMode
-                    });
+                        );
 
-                    const cameraTarget = this.selectedCameraId ? { deviceId: { exact: this.selectedCameraId } } : { facingMode: "environment" };
+                        this.scannerMessage = 'Kamera aktif. Arahkan QR Code ke dalam kotak bidik.';
 
-                    html5QrCode.start(
-                        cameraTarget,
-                        config,
-                        (decodedText) => {
-                            this.onBarcodeScanned(decodedText);
-                        },
-                        (errorMessage) => {
-                            // Frame miss is expected while user aligns camera
-                        }
-                    ).then(() => {
-                        this.scannerMessage = 'Kamera aktif. Arahkan kotak bidik ke QR Code produk.';
-
-                        // Check if flashlight / torch is supported by device camera
+                        // Check torch capability
                         try {
                             const capabilities = html5QrCode.getRunningTrackCapabilities();
                             this.hasTorch = Boolean(capabilities && capabilities.torch);
                         } catch (e) {
                             this.hasTorch = false;
                         }
-                    }).catch(err => {
+                    } catch (err) {
                         console.error('Camera access error:', err);
-                        this.scannerMessage = 'Gagal mengakses kamera. Pastikan izin kamera telah diberikan di peramban (browser).';
-                    });
+                        this.scannerMessage = 'Gagal mengakses kamera. Pastikan izin kamera telah diberikan di peramban.';
+                        this.showNotification('error', 'Izin kamera ditolak atau perangkat kamera tidak terdeteksi.');
+                    }
+                },
+
+                async scanQrFromFile(event) {
+                    const file = event.target.files && event.target.files[0];
+                    if (!file) return;
+
+                    if (!this.html5QrCode) {
+                        this.html5QrCode = new window.Html5Qrcode("reader", { verbose: false });
+                    }
+
+                    this.scannerMessage = 'Membaca QR Code dari berkas gambar...';
+                    try {
+                        const decodedText = await this.html5QrCode.scanFile(file, true);
+                        if (decodedText) {
+                            this.onBarcodeScanned(decodedText);
+                        }
+                    } catch (err) {
+                        console.warn('File QR decode error:', err);
+                        this.scannerMessage = 'QR Code tidak terdeteksi pada gambar.';
+                        this.showNotification('warning', 'QR Code tidak terdeteksi pada berkas gambar yang dipilih.');
+                    } finally {
+                        event.target.value = '';
+                    }
                 },
 
                 toggleTorch() {
@@ -794,58 +921,82 @@
                     }
                 },
 
-                switchCamera(deviceId) {
-                    if (!this.html5QrCode || !deviceId) return;
+                async switchCamera(deviceId) {
+                    if (!deviceId) return;
                     this.selectedCameraId = deviceId;
-                    this.html5QrCode.stop().then(() => {
-                        this.html5QrCode.clear();
+                    await this.closeScannerModal();
+                    this.scannerModalOpen = true;
+                    this.$nextTick(() => {
                         this.initHtml5QrCode();
-                    }).catch(err => {
-                        console.warn('Camera switch error:', err);
                     });
                 },
 
                 onBarcodeScanned(code) {
-                    this.playBeep(880, 120);
-                    let cleanCode = code ? String(code).trim() : '';
+                    let raw = code ? String(code).trim() : '';
+                    if (!raw) return;
 
-                    // Handle QR codes containing URLs or prefixes
-                    if (cleanCode.includes('/') || cleanCode.includes('=')) {
-                        const parts = cleanCode.split(/[\/=]/);
-                        cleanCode = parts[parts.length - 1].trim();
-                    }
+                    this.playBeep(880, 150);
 
-                    const matched = this.products.find(p => 
-                        (p.barcode && p.barcode.toLowerCase() === cleanCode.toLowerCase()) || 
-                        (p.code && p.code.toLowerCase() === cleanCode.toLowerCase())
+                    // 1. Direct match on barcode or code
+                    let matched = this.products.find(p => 
+                        (p.barcode && String(p.barcode).trim().toLowerCase() === raw.toLowerCase()) || 
+                        (p.code && String(p.code).trim().toLowerCase() === raw.toLowerCase())
                     );
 
+                    // 2. Fallback: try stripping URL prefixes or query parameters
+                    if (!matched && (raw.includes('/') || raw.includes('='))) {
+                        const parts = raw.split(/[\/=]/);
+                        const candidate = parts[parts.length - 1].trim();
+                        if (candidate) {
+                            matched = this.products.find(p => 
+                                (p.barcode && String(p.barcode).trim().toLowerCase() === candidate.toLowerCase()) || 
+                                (p.code && String(p.code).trim().toLowerCase() === candidate.toLowerCase())
+                            );
+                        }
+                    }
+
                     if (matched) {
+                        this.scanFeedback = { success: true, text: '✓ Ditemukan: ' + matched.name + ' (Rp ' + this.formatRupiah(matched.selling_price) + ')' };
                         this.addToCart(matched);
-                        this.showNotification('success', 'Produk ' + matched.name + ' berhasil dimasukkan ke keranjang.');
-                        this.closeScannerModal();
+                        this.showNotification('success', '✓ ' + matched.name + ' berhasil dimasukkan ke keranjang.');
+                        
+                        // If camera modal is open, brief delay so user sees green feedback
+                        if (this.scannerModalOpen) {
+                            setTimeout(() => {
+                                this.closeScannerModal();
+                            }, 500);
+                        }
                     } else {
-                        this.showNotification('warning', 'Kode "' + cleanCode + '" tidak cocok dengan produk manapun.');
+                        this.scanFeedback = { success: false, text: '⚠️ Kode "' + raw + '" tidak terdaftar di katalog produk!' };
+                        this.showNotification('warning', '⚠️ Kode QR "' + raw + '" tidak cocok dengan produk manapun.');
+                        if (this.scannerModalOpen) {
+                            setTimeout(() => {
+                                this.scanFeedback = null;
+                            }, 3500);
+                        }
                     }
                 },
 
                 playBeep(frequency, duration) {
                     try {
-                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const AudioContext = window.AudioContext || window.webkitAudioContext;
+                        if (!AudioContext) return;
+                        const audioCtx = new AudioContext();
+                        if (audioCtx.state === 'suspended') {
+                            audioCtx.resume();
+                        }
                         const osc = audioCtx.createOscillator();
                         const gain = audioCtx.createGain();
                         osc.type = 'sine';
-                        osc.frequency.value = frequency || 750;
-                        gain.gain.value = 0.1;
+                        osc.frequency.setValueAtTime(frequency || 750, audioCtx.currentTime);
+                        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + ((duration || 100) / 1000));
                         osc.connect(gain);
                         gain.connect(audioCtx.destination);
                         osc.start();
-                        setTimeout(() => {
-                            osc.stop();
-                            audioCtx.close();
-                        }, duration || 80);
+                        osc.stop(audioCtx.currentTime + ((duration || 100) / 1000));
                     } catch (e) {
-                        // audio not allowed
+                        // audio playback not allowed
                     }
                 },
 
