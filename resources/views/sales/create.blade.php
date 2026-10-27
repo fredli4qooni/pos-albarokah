@@ -337,6 +337,17 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-1.5">
+                            <!-- Quick Camera Flip (Front <-> Back / Putar Lensa) -->
+                            <button @click="flipCamera()" 
+                                    type="button" 
+                                    class="px-2.5 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700 active:scale-95"
+                                    :title="currentFacingMode === 'environment' ? 'Beralih ke Kamera Depan' : 'Beralih ke Kamera Belakang'">
+                                <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                <span class="text-[11px]" x-text="currentFacingMode === 'environment' ? 'Belakang' : 'Depan'"></span>
+                            </button>
+
                             <!-- Mirror / Flip Toggle Button (Front Cam / Laptop) -->
                             <button @click="toggleMirror()" 
                                     type="button" 
@@ -594,6 +605,7 @@
                 hasTorch: false,
                 isTorchOn: false,
                 isMirrored: false,
+                currentFacingMode: 'environment',
                 availableCameras: [],
                 selectedCameraId: null,
 
@@ -798,6 +810,9 @@
                     this.scannerMessage = 'Mengaktifkan sensor kamera...';
                     this.scanFeedback = null;
                     this.isTorchOn = false;
+                    if (!this.currentFacingMode) {
+                        this.currentFacingMode = 'environment';
+                    }
 
                     this.$nextTick(() => {
                         this.startFastScanner();
@@ -836,38 +851,32 @@
                 async startFastScanner() {
                     this.stopCameraStream();
 
-                    // 1. Enumerate video devices
-                    try {
-                        const devices = await navigator.mediaDevices.enumerateDevices();
-                        this.availableCameras = devices
-                            .filter(d => d.kind === 'videoinput')
-                            .map(d => ({ id: d.deviceId, label: d.label || 'Kamera ' + d.deviceId.substring(0, 6) }));
-                    } catch (e) {
-                        this.availableCameras = [];
-                    }
-
-                    // 2. Determine target camera constraints (ideal 1280x720 for crisp QR edge detection)
+                    // Determine target camera constraints (ideal 1280x720 for crisp QR edge detection)
                     let videoConstraints = {
                         width: { ideal: 1280, min: 640 },
                         height: { ideal: 720, min: 480 }
                     };
 
-                    if (this.selectedCameraId && this.availableCameras.some(c => c.id === this.selectedCameraId)) {
+                    if (this.selectedCameraId) {
                         videoConstraints.deviceId = { exact: this.selectedCameraId };
-                    } else if (this.availableCameras.length > 0) {
-                        const backCam = this.availableCameras.find(c => /back|rear|environment|belakang/i.test(c.label));
-                        const chosen = backCam || this.availableCameras[0];
-                        this.selectedCameraId = chosen.id;
-                        videoConstraints.deviceId = { exact: chosen.id };
                     } else {
-                        videoConstraints.facingMode = { ideal: "environment" };
+                        videoConstraints.facingMode = { ideal: this.currentFacingMode || "environment" };
                     }
 
                     try {
-                        const stream = await navigator.mediaDevices.getUserMedia({
-                            video: videoConstraints,
-                            audio: false
-                        });
+                        let stream;
+                        try {
+                            stream = await navigator.mediaDevices.getUserMedia({
+                                video: videoConstraints,
+                                audio: false
+                            });
+                        } catch(fallbackErr) {
+                            // If ideal resolution or exact device fails, fallback to standard stream with facingMode
+                            stream = await navigator.mediaDevices.getUserMedia({
+                                video: { facingMode: { ideal: this.currentFacingMode || "environment" } },
+                                audio: false
+                            });
+                        }
                         this.mediaStream = stream;
 
                         const video = this.$refs.videoElement;
@@ -880,7 +889,7 @@
                         this.scannerMessage = 'Arahkan kamera ke QR Code (Deteksi Instan)';
                         this.isScanningActive = true;
 
-                        // Check torch support, continuous autofocus, & front camera detection
+                        // Check torch support, continuous autofocus, & track settings
                         const track = stream.getVideoTracks()[0];
                         if (track) {
                             try {
@@ -890,13 +899,40 @@
                                 if (capabilities.focusMode && capabilities.focusMode.includes('continuous')) {
                                     await track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] });
                                 }
-                                const isUserFacing = settings.facingMode === 'user' || /front|user|depan|integrated|face/i.test(track.label || '');
-                                if (isUserFacing && !this.selectedCameraId) {
+
+                                if (settings.facingMode) {
+                                    this.currentFacingMode = settings.facingMode;
+                                } else if (/front|user|depan|face/i.test(track.label || '')) {
+                                    this.currentFacingMode = 'user';
+                                } else if (/back|rear|belakang|environment/i.test(track.label || '')) {
+                                    this.currentFacingMode = 'environment';
+                                }
+
+                                if (settings.deviceId) {
+                                    this.selectedCameraId = settings.deviceId;
+                                }
+
+                                if (this.currentFacingMode === 'user' && !this.selectedCameraId) {
                                     this.isMirrored = true;
+                                } else if (this.currentFacingMode === 'environment') {
+                                    this.isMirrored = false;
                                 }
                             } catch(e) {
                                 this.hasTorch = false;
                             }
+                        }
+
+                        // Enumerate devices now that permission is granted
+                        try {
+                            const devices = await navigator.mediaDevices.enumerateDevices();
+                            this.availableCameras = devices
+                                .filter(d => d.kind === 'videoinput')
+                                .map((d, idx) => ({ 
+                                    id: d.deviceId, 
+                                    label: d.label || (d.deviceId ? ('Kamera ' + (idx + 1)) : 'Kamera') 
+                                }));
+                        } catch (e) {
+                            this.availableCameras = [];
                         }
 
                         // Run real-time high-speed frame loop
@@ -1112,9 +1148,36 @@
                     }
                 },
 
+                async flipCamera() {
+                    if (this.availableCameras.length > 1) {
+                        const currentIndex = this.availableCameras.findIndex(c => c.id === this.selectedCameraId);
+                        const nextIndex = (currentIndex + 1) % this.availableCameras.length;
+                        const nextCam = this.availableCameras[nextIndex];
+                        this.selectedCameraId = nextCam.id;
+
+                        const isNextFront = /front|user|depan|face/i.test(nextCam.label);
+                        this.currentFacingMode = isNextFront ? 'user' : 'environment';
+                        this.isMirrored = isNextFront;
+                    } else {
+                        this.currentFacingMode = (this.currentFacingMode === 'environment') ? 'user' : 'environment';
+                        this.selectedCameraId = null;
+                        this.isMirrored = (this.currentFacingMode === 'user');
+                    }
+
+                    const modeLabel = (this.currentFacingMode === 'environment') ? 'Kamera Belakang' : 'Kamera Depan';
+                    this.showNotification('info', 'Beralih ke ' + modeLabel);
+                    await this.startFastScanner();
+                },
+
                 async switchCamera(deviceId) {
                     if (!deviceId) return;
                     this.selectedCameraId = deviceId;
+                    const chosen = this.availableCameras.find(c => c.id === deviceId);
+                    if (chosen) {
+                        const isFront = /front|user|depan|face/i.test(chosen.label);
+                        this.currentFacingMode = isFront ? 'user' : 'environment';
+                        this.isMirrored = isFront;
+                    }
                     await this.startFastScanner();
                 },
 
