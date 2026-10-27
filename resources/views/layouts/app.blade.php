@@ -204,26 +204,31 @@
         <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
             
             <!-- Top Navbar -->
-            <header class="h-20 flex-shrink-0 bg-white border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 z-10">
-                <div class="flex items-center gap-4">
-                    <button @click="sidebarOpen = true" class="lg:hidden text-slate-600 hover:text-slate-900 p-2 rounded-lg hover:bg-slate-100">
+            <header class="h-16 sm:h-20 flex-shrink-0 bg-white border-b border-slate-200 flex items-center justify-between px-3.5 sm:px-6 lg:px-8 z-10">
+                <div class="flex items-center gap-2.5 sm:gap-4 min-w-0">
+                    <button @click="sidebarOpen = true" class="lg:hidden text-slate-600 hover:text-slate-900 p-1.5 sm:p-2 rounded-xl hover:bg-slate-100 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-emerald-500" aria-label="Buka Menu Navigasi">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
                     </button>
                     
-                    <div>
-                        <h1 class="text-lg font-bold text-slate-900 tracking-tight">
+                    <div class="min-w-0">
+                        <h1 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight truncate">
                             @yield('page_title', 'Toko Pertanian Al Barokah')
                         </h1>
-                        <p class="text-xs text-slate-500">
+                        <!-- Subtitle Desktop -->
+                        <p class="hidden sm:block text-xs text-slate-500 truncate">
                             Sistem Kasir POS, Inventori & Demand Forecasting (Single Moving Average)
+                        </p>
+                        <!-- Subtitle Mobile: Ringkas & Elegan -->
+                        <p class="sm:hidden text-[11px] font-medium text-emerald-600 truncate">
+                            Toko Pertanian Al Barokah
                         </p>
                     </div>
                 </div>
 
                 <!-- Right Topbar Items -->
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
                     <div class="hidden md:flex items-center text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block mr-2 animate-pulse"></span>
                         <span id="current-datetime">{{ now()->translatedFormat('l, d F Y') }}</span>
@@ -231,8 +236,8 @@
 
                     <!-- User Profile Dropdown -->
                     <div class="relative" x-data="{ userMenuOpen: false }">
-                        <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 transition">
-                            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center text-sm">
+                        <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-1.5 sm:gap-2 p-1 sm:p-1.5 rounded-xl hover:bg-slate-100 transition focus:outline-none">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-xs">
                                 {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                             </div>
                             <span class="hidden sm:inline-block text-xs font-semibold text-slate-700">{{ Auth::user()->name ?? 'Admin' }}</span>
@@ -262,9 +267,9 @@
             </header>
 
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto px-6 lg:px-8 py-6">
+            <main class="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
                 @if (isset($header))
-                    <div class="mb-6">
+                    <div class="mb-4 sm:mb-6">
                         {{ $header }}
                     </div>
                 @endif

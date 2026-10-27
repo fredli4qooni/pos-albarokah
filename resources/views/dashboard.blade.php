@@ -2,18 +2,18 @@
     @section('page_title', 'Dashboard Eksekutif')
 
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <div>
-                <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                <h2 class="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
                     Dashboard Operasional Toko Pertanian
                 </h2>
-                <p class="text-xs text-slate-500 mt-0.5">
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
                     Selamat datang kembali, <span class="font-bold text-emerald-700">{{ Auth::user()->name }}</span>! Pantau performa omset kasir, piutang, dan rekomendasi restok inventori saprotan Anda.
                 </p>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 pt-1 sm:pt-0">
                 <a href="{{ route('sales.create') }}" 
-                   class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition">
+                   class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
@@ -26,86 +26,86 @@
     <div class="space-y-6">
         
         <!-- 4 KPI Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
             
             <!-- Card 1: Penjualan Hari Ini -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
                 <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Penjualan Hari Ini</span>
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">Penjualan Hari Ini</span>
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                        <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                 </div>
-                <div class="mt-3">
-                    <h3 class="text-2xl font-black text-slate-900 font-mono tracking-tight">
+                <div class="mt-2.5 sm:mt-3">
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-900 font-mono tracking-tight">
                         Rp {{ number_format($stats['today_sales_revenue'], 0, ',', '.') }}
                     </h3>
-                    <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                    <p class="text-[11px] sm:text-xs text-slate-500 mt-1 flex items-center gap-1">
                         <span class="font-bold text-emerald-600 font-mono">{{ $stats['today_sales_count'] }}</span> nota transaksi berhasil hari ini
                     </p>
                 </div>
             </div>
 
             <!-- Card 2: Omset Bulan Ini -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
                 <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Omset Bulan Berjalan</span>
-                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">Omset Bulan Berjalan</span>
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold">
+                        <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                         </svg>
                     </div>
                 </div>
-                <div class="mt-3">
-                    <h3 class="text-2xl font-black text-teal-700 font-mono tracking-tight">
+                <div class="mt-2.5 sm:mt-3">
+                    <h3 class="text-xl sm:text-2xl font-black text-teal-700 font-mono tracking-tight">
                         Rp {{ number_format($stats['month_sales_revenue'], 0, ',', '.') }}
                     </h3>
-                    <p class="text-xs text-slate-500 mt-1">
+                    <p class="text-[11px] sm:text-xs text-slate-500 mt-1">
                         Bulan {{ now()->translatedFormat('F Y') }} ({{ $stats['month_sales_count'] }} transaksi)
                     </p>
                 </div>
             </div>
 
             <!-- Card 3: Total Piutang Petani Aktif -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
                 <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Sisa Piutang Petani</span>
-                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">Sisa Piutang Petani</span>
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+                        <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
                     </div>
                 </div>
-                <div class="mt-3">
-                    <h3 class="text-2xl font-black text-rose-600 font-mono tracking-tight">
+                <div class="mt-2.5 sm:mt-3">
+                    <h3 class="text-xl sm:text-2xl font-black text-rose-600 font-mono tracking-tight">
                         Rp {{ number_format($stats['total_active_debt'], 0, ',', '.') }}
                     </h3>
-                    <p class="text-xs text-amber-700 font-semibold mt-1">
+                    <p class="text-[11px] sm:text-xs text-amber-700 font-semibold mt-1">
                         {{ $stats['total_active_debtors'] }} petani memiliki tagihan aktif
                     </p>
                 </div>
             </div>
 
             <!-- Card 4: Rekomendasi Restok SMA -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
                 <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Rekomendasi Restok SMA</span>
-                    <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">Rekomendasi Restok SMA</span>
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
+                        <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                         </svg>
                     </div>
                 </div>
-                <div class="mt-3">
+                <div class="mt-2.5 sm:mt-3">
                     <div class="flex items-baseline gap-2">
-                        <h3 class="text-2xl font-black text-rose-700 font-mono tracking-tight">
+                        <h3 class="text-xl sm:text-2xl font-black text-rose-700 font-mono tracking-tight">
                             {{ $stats['sma_needs_restock_count'] }}
                         </h3>
                         <span class="text-xs font-bold text-slate-400">Produk</span>
                     </div>
-                    <p class="text-xs text-slate-500 mt-1">
+                    <p class="text-[11px] sm:text-xs text-slate-500 mt-1">
                         <span class="text-amber-600 font-semibold">{{ $stats['low_stock_count'] }} menipis</span> • <span class="text-rose-600 font-semibold">{{ $stats['out_of_stock_count'] }} habis</span>
                     </p>
                 </div>
@@ -114,11 +114,11 @@
         </div>
 
         <!-- 14-Day Sales Trend Chart (Chart.js) -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100">
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 pb-4 border-b border-slate-100">
                 <div>
-                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
                         <span>Tren Omset Penjualan 14 Hari Terakhir</span>
                     </h3>
                     <p class="text-xs text-slate-500 mt-0.5">Visualisasi perbandingan pendapatan tunai dan kredit harian toko</p>
@@ -137,18 +137,18 @@
             </div>
 
             <!-- Canvas Container -->
-            <div class="relative mt-4 h-72 w-full">
+            <div class="relative mt-4 h-60 sm:h-72 w-full">
                 <canvas id="salesChart"></canvas>
             </div>
         </div>
 
         <!-- 2 Columns: Urgent Restock Alerts & Top Debtors -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-start">
             
             <!-- Column 1: Urgent Restock Alerts (SMA & Min Stock) -->
-            <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between">
+            <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between">
                 <div>
-                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                    <div class="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
                                 !
@@ -196,9 +196,9 @@
             </div>
 
             <!-- Column 2: 5 Top Debtors (Petani Piutang Terbesar) -->
-            <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between">
+            <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between">
                 <div>
-                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                    <div class="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
                                 Rp
@@ -221,7 +221,7 @@
                                     <h4 class="text-xs font-bold text-slate-900 truncate">{{ $debtor->name }}</h4>
                                     @if($debtor->phone)
                                         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $debtor->phone) }}" target="_blank" class="text-[10px] text-emerald-600 hover:underline font-mono block mt-0.5">
-                                            WA: {{ $debtor->phone }}
+                                             WA: {{ $debtor->phone }}
                                         </a>
                                     @else
                                         <span class="text-[10px] text-slate-400">Tanpa nomor telepon</span>
@@ -250,8 +250,8 @@
         </div>
 
         <!-- Recent Sales Table -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-sm">
+            <div class="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100">
                 <div>
                     <h3 class="text-sm font-bold text-slate-900">Transaksi Kasir Terkini</h3>
                     <p class="text-[11px] text-slate-400">5 transaksi penjualan terakhir yang diproses kasir</p>
@@ -318,7 +318,7 @@
         </div>
 
         <!-- Quick Launch Module Grid -->
-        <div class="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm">
+        <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/80 p-4 sm:p-6 shadow-sm">
             <h3 class="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
