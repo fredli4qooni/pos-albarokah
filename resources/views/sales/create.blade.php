@@ -442,21 +442,10 @@
                         </div>
 
                         <p class="text-center text-xs text-slate-300 mt-2 font-medium" x-text="scannerMessage || 'Mempersiapkan kamera...'"></p>
-
-                        <!-- Scanning Tips Guide -->
-                        <div class="mt-2.5 p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400 space-y-1">
-                            <p class="text-slate-200 font-bold flex items-center gap-1.5">
-                                <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <span>Petunjuk & Dukungan Kamera Depan (Laptop):</span>
-                            </p>
-                            <p class="leading-relaxed">• Sistem dilengkapi <strong>Auto-Detect Dual Orientation</strong> — otomatis mendeteksi QR Code posisi normal maupun terbalik (efek mirror webcam laptop).</p>
-                            <p class="leading-relaxed">• Tekan tombol <strong>Cermin</strong> di kanan atas jika ingin membalik pratinjau kamera agar gerakan tangan terasa natural seperti cermin.</p>
-                            <p class="leading-relaxed">• Anda juga bisa memindai dengan <strong>Barcode Scanner Gun (USB / Nirkabel)</strong> langsung di kasir tanpa membuka popup ini.</p>
-                        </div>
                     </div>
 
-                    <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
-                        <button @click="closeScannerModal()" type="button" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold rounded-xl transition">
+                    <div class="p-3.5 sm:p-4 bg-slate-50 border-t border-slate-200 flex justify-end">
+                        <button @click="closeScannerModal()" type="button" class="w-full sm:w-auto px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold rounded-xl transition">
                             Tutup Scanner
                         </button>
                     </div>
