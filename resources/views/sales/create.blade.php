@@ -354,8 +354,20 @@
 
                     <!-- Viewfinder Container with Square QR Reticle -->
                     <div class="p-4 bg-slate-950">
-                        <div class="relative w-full rounded-2xl overflow-hidden bg-black text-white min-h-[290px] flex items-center justify-center border border-slate-800">
-                            <div id="reader" class="w-full"></div>
+                        <div class="relative w-full rounded-2xl overflow-hidden bg-black text-white min-h-[300px] sm:min-h-[360px] flex items-center justify-center border border-slate-800">
+                            <!-- High-Performance Direct Video Stream -->
+                            <video x-ref="videoElement" 
+                                   class="w-full h-full object-cover min-h-[300px] sm:min-h-[360px]" 
+                                   playsinline 
+                                   autoplay 
+                                   muted>
+                            </video>
+                            
+                            <!-- Offscreen Canvas for jsQR Real-Time Processing -->
+                            <canvas x-ref="scanCanvas" class="hidden"></canvas>
+                            
+                            <!-- Hidden container for Html5Qrcode fallback -->
+                            <div id="reader" class="hidden w-full"></div>
                             
                             <!-- Square QR Aiming Reticle (4 corner brackets) -->
                             <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -569,8 +581,12 @@
                 cashInput: '',
                 isSubmitting: false,
 
-                // Scanner Modal
+                // Real-time Fast Camera Scanner State
                 scannerModalOpen: false,
+                mediaStream: null,
+                animFrameId: null,
+                isScanningActive: false,
+                hardwareDetector: null,
                 html5QrCode: null,
                 scannerMessage: '',
                 scanFeedback: null,
@@ -589,6 +605,15 @@
                 lastSaleResult: null,
 
                 init() {
+                    // Initialize Native Hardware BarcodeDetector if supported by OS/browser (Google Lens on Android, Vision on iOS)
+                    if ('BarcodeDetector' in window) {
+                        try {
+                            this.hardwareDetector = new window.BarcodeDetector({ formats: ['qr_code'] });
+                        } catch (e) {
+                            this.hardwareDetector = null;
+                        }
+                    }
+
                     // Global physical barcode scanner listener (HID keyboard mode)
                     let barcodeBuffer = '';
                     let lastKeyTime = Date.now();
@@ -768,122 +793,164 @@
 
                 openScannerModal() {
                     this.scannerModalOpen = true;
-                    this.scannerMessage = 'Mempersiapkan kamera...';
+                    this.scannerMessage = 'Mengaktifkan sensor kamera...';
                     this.scanFeedback = null;
                     this.isTorchOn = false;
 
                     this.$nextTick(() => {
-                        this.initHtml5QrCode();
+                        this.startFastScanner();
                     });
                 },
 
-                async closeScannerModal() {
-                    if (this.html5QrCode) {
-                        try {
-                            if (this.html5QrCode.isScanning) {
-                                await this.html5QrCode.stop();
-                            }
-                            this.html5QrCode.clear();
-                        } catch (err) {
-                            console.warn('Scanner stop error:', err);
-                        } finally {
-                            this.html5QrCode = null;
-                        }
-                    }
+                closeScannerModal() {
+                    this.stopCameraStream();
                     this.isTorchOn = false;
                     this.scanFeedback = null;
                     this.scannerModalOpen = false;
                 },
 
-                async initHtml5QrCode() {
-                    if (!window.Html5Qrcode) {
-                        this.scannerMessage = 'Library pemindai barcode belum siap.';
-                        this.showNotification('error', 'Library pemindai kamera belum termuat.');
-                        return;
+                stopCameraStream() {
+                    this.isScanningActive = false;
+                    if (this.animFrameId) {
+                        cancelAnimationFrame(this.animFrameId);
+                        this.animFrameId = null;
                     }
-
-                    // Clean up any existing scanner instance first
-                    if (this.html5QrCode) {
-                        try {
-                            if (this.html5QrCode.isScanning) {
-                                await this.html5QrCode.stop();
-                            }
-                            this.html5QrCode.clear();
-                        } catch (e) {}
-                        this.html5QrCode = null;
+                    if (this.mediaStream) {
+                        this.mediaStream.getTracks().forEach(track => {
+                            try { track.stop(); } catch(e) {}
+                        });
+                        this.mediaStream = null;
                     }
+                    if (this.$refs.videoElement) {
+                        this.$refs.videoElement.srcObject = null;
+                    }
+                },
 
-                    // Enumerate video cameras
-                    let cameras = [];
+                async startFastScanner() {
+                    this.stopCameraStream();
+
+                    // 1. Enumerate video devices
                     try {
-                        cameras = await window.Html5Qrcode.getCameras();
-                    } catch (err) {
-                        console.warn('Could not enumerate cameras:', err);
+                        const devices = await navigator.mediaDevices.enumerateDevices();
+                        this.availableCameras = devices
+                            .filter(d => d.kind === 'videoinput')
+                            .map(d => ({ id: d.deviceId, label: d.label || 'Kamera ' + d.deviceId.substring(0, 6) }));
+                    } catch (e) {
+                        this.availableCameras = [];
                     }
-                    this.availableCameras = cameras || [];
 
-                    // Select camera: preferred selected, then back camera, then first available
-                    let cameraTarget = null;
+                    // 2. Determine target camera constraints (ideal 1280x720 for crisp QR edge detection)
+                    let videoConstraints = {
+                        width: { ideal: 1280, min: 640 },
+                        height: { ideal: 720, min: 480 }
+                    };
+
                     if (this.selectedCameraId && this.availableCameras.some(c => c.id === this.selectedCameraId)) {
-                        cameraTarget = { deviceId: { exact: this.selectedCameraId } };
+                        videoConstraints.deviceId = { exact: this.selectedCameraId };
                     } else if (this.availableCameras.length > 0) {
                         const backCam = this.availableCameras.find(c => /back|rear|environment|belakang/i.test(c.label));
-                        const targetCam = backCam || this.availableCameras[0];
-                        this.selectedCameraId = targetCam.id;
-                        cameraTarget = { deviceId: { exact: targetCam.id } };
+                        const chosen = backCam || this.availableCameras[0];
+                        this.selectedCameraId = chosen.id;
+                        videoConstraints.deviceId = { exact: chosen.id };
                     } else {
-                        // Fallback constraint: ideal environment camera (does not throw OverconstrainedError if desktop)
-                        cameraTarget = { facingMode: { ideal: "environment" } };
+                        videoConstraints.facingMode = { ideal: "environment" };
                     }
-
-                    // Create pure ZXing scanner without problematic experimental features
-                    const html5QrCode = new window.Html5Qrcode("reader", {
-                        verbose: false
-                    });
-                    this.html5QrCode = html5QrCode;
-
-                    // Responsive square scanning box optimized for 2D QR Code
-                    const qrboxFunction = (viewfinderWidth, viewfinderHeight) => {
-                        const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-                        const size = Math.min(Math.floor(minEdge * 0.82), 300);
-                        return {
-                            width: Math.max(size, 200),
-                            height: Math.max(size, 200)
-                        };
-                    };
-
-                    const config = {
-                        fps: 12, // 10-15 FPS is optimal for CPU matrix decoding
-                        qrbox: qrboxFunction,
-                        disableFlip: false
-                    };
 
                     try {
-                        await html5QrCode.start(
-                            cameraTarget,
-                            config,
-                            (decodedText) => {
-                                this.onBarcodeScanned(decodedText);
-                            },
-                            (errorMessage) => {
-                                // Frame tick while aligning
+                        const stream = await navigator.mediaDevices.getUserMedia({
+                            video: videoConstraints,
+                            audio: false
+                        });
+                        this.mediaStream = stream;
+
+                        const video = this.$refs.videoElement;
+                        if (!video) return;
+
+                        video.srcObject = stream;
+                        video.setAttribute("playsinline", "true");
+                        await video.play();
+
+                        this.scannerMessage = 'Arahkan kamera ke QR Code (Deteksi Instan)';
+                        this.isScanningActive = true;
+
+                        // Check torch support & continuous autofocus
+                        const track = stream.getVideoTracks()[0];
+                        if (track) {
+                            try {
+                                const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+                                this.hasTorch = Boolean(capabilities && capabilities.torch);
+                                if (capabilities.focusMode && capabilities.focusMode.includes('continuous')) {
+                                    await track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] });
+                                }
+                            } catch(e) {
+                                this.hasTorch = false;
                             }
-                        );
-
-                        this.scannerMessage = 'Kamera aktif. Arahkan QR Code ke dalam kotak bidik.';
-
-                        // Check torch capability
-                        try {
-                            const capabilities = html5QrCode.getRunningTrackCapabilities();
-                            this.hasTorch = Boolean(capabilities && capabilities.torch);
-                        } catch (e) {
-                            this.hasTorch = false;
                         }
+
+                        // Run real-time high-speed frame loop
+                        this.runRealtimeScanLoop();
+
                     } catch (err) {
-                        console.error('Camera access error:', err);
-                        this.scannerMessage = 'Gagal mengakses kamera. Pastikan izin kamera telah diberikan di peramban.';
+                        console.error('Fast scanner start error:', err);
+                        this.scannerMessage = 'Gagal mengakses kamera. Berikan izin kamera di peramban Anda.';
                         this.showNotification('error', 'Izin kamera ditolak atau perangkat kamera tidak terdeteksi.');
                     }
+                },
+
+                runRealtimeScanLoop() {
+                    if (!this.scannerModalOpen || !this.isScanningActive) return;
+
+                    const video = this.$refs.videoElement;
+                    const canvas = this.$refs.scanCanvas;
+
+                    const checkFrame = async () => {
+                        if (!this.scannerModalOpen || !this.isScanningActive) return;
+
+                        if (video && video.readyState >= 2 && !this.scanFeedback && video.videoWidth > 0) {
+                            let foundText = null;
+
+                            // Engine 1: Native Hardware BarcodeDetector (Google Lens Engine on Android / Vision on iOS)
+                            if (this.hardwareDetector) {
+                                try {
+                                    const codes = await this.hardwareDetector.detect(video);
+                                    if (codes && codes.length > 0 && codes[0].rawValue) {
+                                        foundText = codes[0].rawValue;
+                                    }
+                                } catch(e) {}
+                            }
+
+                            // Engine 2: Ultra-Fast Canvas jsQR (< 6ms execution)
+                            if (!foundText && window.jsQR && canvas) {
+                                try {
+                                    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                                    // Downscale width to max 480px for lightning-fast sub-10ms decoding
+                                    const maxDim = Math.max(video.videoWidth, video.videoHeight);
+                                    const scale = maxDim > 480 ? (480 / maxDim) : 1.0;
+                                    const w = Math.round(video.videoWidth * scale);
+                                    const h = Math.round(video.videoHeight * scale);
+
+                                    canvas.width = w;
+                                    canvas.height = h;
+                                    ctx.drawImage(video, 0, 0, w, h);
+                                    const imgData = ctx.getImageData(0, 0, w, h);
+                                    const qr = window.jsQR(imgData.data, w, h, { inversionAttempts: "dontInvert" });
+                                    if (qr && qr.data) {
+                                        foundText = qr.data;
+                                    }
+                                } catch(e) {}
+                            }
+
+                            if (foundText) {
+                                this.isScanningActive = false;
+                                this.onBarcodeScanned(foundText);
+                                return;
+                            }
+                        }
+
+                        this.animFrameId = requestAnimationFrame(checkFrame);
+                    };
+
+                    this.animFrameId = requestAnimationFrame(checkFrame);
                 },
 
                 async scanQrFromFile(event) {
@@ -892,21 +959,12 @@
 
                     this.scannerMessage = 'Membaca QR Code dari berkas gambar...';
 
-                    // 1. Safely stop active camera scan if running (Html5Qrcode requires camera stopped before scanFile)
-                    if (this.html5QrCode) {
-                        try {
-                            if (this.html5QrCode.isScanning) {
-                                await this.html5QrCode.stop();
-                            }
-                            this.html5QrCode.clear();
-                        } catch (e) {
-                            console.warn('Camera stop before file scan error:', e);
-                        }
-                    }
+                    // 1. Safely stop active camera scan if running
+                    this.stopCameraStream();
 
                     let decodedCode = null;
 
-                    // 2. Engine 1: Client-side Canvas Image + jsQR (supports multi-scale downsampling for high-res photos)
+                    // 2. Engine 1: Client-side Canvas Image + jsQR (multi-scale downsampling for high-res photos)
                     try {
                         const img = new Image();
                         const objectUrl = URL.createObjectURL(file);
@@ -974,26 +1032,25 @@
                     event.target.value = '';
                 },
 
-                toggleTorch() {
-                    if (!this.html5QrCode || !this.hasTorch) return;
+                async toggleTorch() {
+                    if (!this.mediaStream || !this.hasTorch) return;
                     this.isTorchOn = !this.isTorchOn;
-                    try {
-                        this.html5QrCode.applyVideoConstraints({
-                            advanced: [{ torch: this.isTorchOn }]
-                        });
-                    } catch (err) {
-                        console.warn('Torch toggle error:', err);
+                    const track = this.mediaStream.getVideoTracks()[0];
+                    if (track) {
+                        try {
+                            await track.applyConstraints({
+                                advanced: [{ torch: this.isTorchOn }]
+                            });
+                        } catch(err) {
+                            console.warn('Torch toggle error:', err);
+                        }
                     }
                 },
 
                 async switchCamera(deviceId) {
                     if (!deviceId) return;
                     this.selectedCameraId = deviceId;
-                    await this.closeScannerModal();
-                    this.scannerModalOpen = true;
-                    this.$nextTick(() => {
-                        this.initHtml5QrCode();
-                    });
+                    await this.startFastScanner();
                 },
 
                 onBarcodeScanned(code) {
