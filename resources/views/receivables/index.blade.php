@@ -157,14 +157,14 @@
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
                         <tr class="border-b border-slate-100 bg-slate-50/75 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                            <th class="py-3.5 px-4">No. Invoice & Tanggal</th>
-                            <th class="py-3.5 px-4">Petani / Pelanggan</th>
-                            <th class="py-3.5 px-4 text-right">Total Tagihan</th>
-                            <th class="py-3.5 px-4 text-right">Terbayar</th>
-                            <th class="py-3.5 px-4 text-right">Sisa Tagihan</th>
-                            <th class="py-3.5 px-4 text-center">Pelunasan</th>
-                            <th class="py-3.5 px-4 text-center">Status</th>
-                            <th class="py-3.5 px-4 text-center">Aksi</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">No. Invoice & Tanggal</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Petani / Pelanggan</th>
+                            <th class="py-3.5 px-4 text-right whitespace-nowrap">Total Tagihan</th>
+                            <th class="py-3.5 px-4 text-right whitespace-nowrap">Terbayar</th>
+                            <th class="py-3.5 px-4 text-right whitespace-nowrap">Sisa Tagihan</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Pelunasan</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap min-w-[120px]">Status</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -226,14 +226,16 @@
                                 </td>
 
                                 <!-- Status Badge -->
-                                <td class="py-3.5 px-4 text-center">
+                                <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                     @if($item->status === 'lunas')
-                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                            LUNAS
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
+                                            <span>LUNAS</span>
                                         </span>
                                     @else
-                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
-                                            BELUM LUNAS
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0 animate-pulse"></span>
+                                            <span>BELUM LUNAS</span>
                                         </span>
                                     @endif
                                 </td>

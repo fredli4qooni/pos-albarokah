@@ -285,14 +285,16 @@
                                 <td class="py-3 px-3 font-medium text-slate-800">
                                     {{ $sale->customer->name ?? 'Pelanggan Umum' }}
                                 </td>
-                                <td class="py-3 px-3 text-center">
+                                <td class="py-3 px-3 text-center whitespace-nowrap">
                                     @if($sale->payment_method === 'cash')
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
-                                            TUNAI
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            <span>TUNAI</span>
                                         </span>
                                     @else
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800">
-                                            KREDIT
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wider bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                            <span>KREDIT</span>
                                         </span>
                                     @endif
                                 </td>
