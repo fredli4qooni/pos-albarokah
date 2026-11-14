@@ -33,10 +33,7 @@
             <!-- Store & Invoice Header -->
             <div class="p-6 sm:p-8 bg-white border-b border-slate-200 text-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                 <div>
-                    <div class="flex items-center gap-2.5 mb-1">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                        </div>
+                    <div class="mb-1">
                         <h1 class="text-xl font-black tracking-tight text-slate-900">TOKO PERTANIAN AL BAROKAH</h1>
                     </div>
                     <p class="text-xs text-slate-500">Pusat Obat Pertanian, Pupuk, Benih & Alat Saprotan</p>
@@ -48,12 +45,14 @@
                     <span class="text-2xl font-black text-slate-900 font-mono">{{ $sale->invoice_no }}</span>
                     <div class="pt-1">
                         @if($sale->payment_method === 'cash')
-                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                LUNAS • TUNAI
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                <span>LUNAS • TUNAI</span>
                             </span>
                         @else
-                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                                KREDIT (PIUTANG PETANI)
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                <span>KREDIT (PIUTANG PETANI)</span>
                             </span>
                         @endif
                     </div>
@@ -142,8 +141,9 @@
                             <span class="w-7 h-7 rounded-lg bg-amber-200 text-amber-800 flex items-center justify-center font-bold text-xs">!</span>
                             <h3 class="text-sm font-bold text-amber-900">Status Pencatatan Piutang Petani</h3>
                         </div>
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold uppercase font-mono {{ $sale->receivable->status === 'lunas' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800' }}">
-                            {{ $sale->receivable->status === 'lunas' ? 'Sudah Lunas' : 'Belum Lunas' }}
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase font-mono whitespace-nowrap {{ $sale->receivable->status === 'lunas' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-100 text-amber-800 border border-amber-200' }}">
+                            <span class="w-1.5 h-1.5 rounded-full {{ $sale->receivable->status === 'lunas' ? 'bg-emerald-500' : 'bg-amber-500' }}"></span>
+                            <span>{{ $sale->receivable->status === 'lunas' ? 'Sudah Lunas' : 'Belum Lunas' }}</span>
                         </span>
                     </div>
 

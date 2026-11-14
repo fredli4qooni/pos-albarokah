@@ -181,13 +181,13 @@
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
                         <tr class="border-b border-slate-100 bg-slate-50/75 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                            <th class="py-3.5 px-4">Produk Saprotan</th>
-                            <th class="py-3.5 px-4 text-center">Stok Fisik Saat Ini</th>
-                            <th class="py-3.5 px-4 text-center">Histori Terdata</th>
-                            <th class="py-3.5 px-4 text-center">Prediksi Permintaan (SMA 7-Hari)</th>
-                            <th class="py-3.5 px-4 text-center">Status Rekomendasi</th>
-                            <th class="py-3.5 px-4 text-center">Saran Tambah Stok</th>
-                            <th class="py-3.5 px-4 text-center">Aksi</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Produk Saprotan</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Stok Fisik Saat Ini</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Histori Terdata</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Prediksi Permintaan (SMA 7-Hari)</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap min-w-[130px]">Status Rekomendasi</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Saran Tambah Stok</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -231,18 +231,21 @@
                                 </td>
 
                                 <!-- Status Rekomendasi Badge -->
-                                <td class="py-3.5 px-4 text-center">
+                                <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                     @if($item['status'] === 'perlu_restok')
-                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-200">
-                                            PERLU RESTOK
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-rose-50 text-rose-700 border border-rose-200 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                            <span>PERLU RESTOK</span>
                                         </span>
                                     @elseif($item['status'] === 'aman')
-                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                            STOK AMAN
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            <span>STOK AMAN</span>
                                         </span>
                                     @else
-                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200" title="Data penjualan kurang dari 7 hari">
-                                            DATA BELUM CUKUP
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap" title="Data penjualan kurang dari 7 hari">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                            <span>DATA BELUM CUKUP</span>
                                         </span>
                                     @endif
                                 </td>

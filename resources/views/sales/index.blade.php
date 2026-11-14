@@ -123,13 +123,13 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-slate-100 bg-slate-50/75 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                            <th class="py-3.5 px-4">No. Invoice</th>
-                            <th class="py-3.5 px-4">Waktu Transaksi</th>
-                            <th class="py-3.5 px-4">Pelanggan Petani</th>
-                            <th class="py-3.5 px-4 text-center">Metode</th>
-                            <th class="py-3.5 px-4 text-center">Item</th>
-                            <th class="py-3.5 px-4 text-right">Total Transaksi</th>
-                            <th class="py-3.5 px-4 text-center">Aksi</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">No. Invoice</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Waktu Transaksi</th>
+                            <th class="py-3.5 px-4 whitespace-nowrap">Pelanggan Petani</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Metode</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Item</th>
+                            <th class="py-3.5 px-4 text-right whitespace-nowrap">Total Transaksi</th>
+                            <th class="py-3.5 px-4 text-center whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-xs">
@@ -153,14 +153,16 @@
                                         <span class="text-slate-400 italic">Umum / Anonim</span>
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-4 text-center">
+                                <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                     @if($sale->payment_method === 'cash')
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                            TUNAI
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            <span>TUNAI</span>
                                         </span>
                                     @else
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
-                                            KREDIT
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                            <span>KREDIT</span>
                                         </span>
                                     @endif
                                 </td>

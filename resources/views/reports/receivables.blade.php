@@ -164,14 +164,16 @@
                             <td class="py-3 px-4 text-right font-bold font-mono {{ $rec->remaining_balance > 0 ? 'text-amber-700' : 'text-slate-400' }}">
                                 Rp {{ number_format($rec->remaining_balance, 0, ',', '.') }}
                             </td>
-                            <td class="py-3 px-4 text-center">
+                            <td class="py-3 px-4 text-center whitespace-nowrap">
                                 @if($rec->status === 'lunas')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                        Lunas
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                        <span>LUNAS</span>
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                                        Belum Lunas
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                        <span>BELUM LUNAS</span>
                                     </span>
                                 @endif
                             </td>

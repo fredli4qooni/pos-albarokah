@@ -42,12 +42,14 @@
                 <div class="sm:text-right space-y-1">
                     <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Status Pelunasan</span>
                     @if($receivable->status === 'lunas')
-                        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            SUDAH LUNAS
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>SUDAH LUNAS</span>
                         </span>
                     @else
-                        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                            BELUM LUNAS
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold tracking-wider bg-amber-50 text-amber-700 border border-amber-200 whitespace-nowrap">
+                            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span>BELUM LUNAS</span>
                         </span>
                     @endif
                     <p class="text-[11px] text-slate-500 mt-1">Tanggal Transaksi: {{ $receivable->created_at->format('d/m/Y H:i') }}</p>
