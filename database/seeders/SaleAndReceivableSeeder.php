@@ -9,8 +9,10 @@ use App\Models\Receivable;
 use App\Models\Restock;
 use App\Models\Sale;
 use App\Models\User;
+use App\Services\ForecastService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SaleAndReceivableSeeder extends Seeder
 {
@@ -106,10 +108,10 @@ class SaleAndReceivableSeeder extends Seeder
             );
         }
 
-        // 4. Only 3 Days Sales for Prevathon (< 7 days -> To test "Data Belum Mencukupi")
-        $prevathonSalesQty = [1, 2, 1];
+        // 4. 7 Days Historical Sales for Prevathon (>= 7 days for SMA calculation)
+        $prevathonSalesQty = [2, 3, 2, 4, 3, 2, 3];
         foreach ($prevathonSalesQty as $index => $qty) {
-            $daysAgo = 3 - $index;
+            $daysAgo = 7 - $index;
             $date = Carbon::today()->subDays($daysAgo)->setTime(14, 20, 0);
 
             $subtotal = $qty * (float) $prevathon->selling_price;
@@ -172,11 +174,11 @@ class SaleAndReceivableSeeder extends Seeder
             }
         }
 
-        // 6. Only 4 Days Sales for Benih jagung hibrida 1kg (< 7 days -> To test "Data Belum Mencukupi")
+        // 6. 7 Days Sales for Benih jagung hibrida 1kg (>= 7 days for SMA calculation)
         if ($benihJagung) {
-            $benihSalesQty = [2, 3, 2, 4];
+            $benihSalesQty = [2, 3, 2, 4, 3, 2, 3];
             foreach ($benihSalesQty as $index => $qty) {
-                $daysAgo = 4 - $index;
+                $daysAgo = 7 - $index;
                 $date = Carbon::today()->subDays($daysAgo)->setTime(14, 15, 0);
 
                 $subtotal = $qty * (float) $benihJagung->selling_price;
@@ -302,5 +304,102 @@ class SaleAndReceivableSeeder extends Seeder
             'remaining_balance' => $total3,
             'status' => 'belum_lunas',
         ]);
+
+        // 8. 7 Days Historical Sales for All Remaining Active Products
+        // Memastikan seluruh 369 produk memiliki minimal 7 hari histori penjualan
+        // sehingga seluruh produk dapat dihitung estimasi SMA 7-Hari (tanpa ada 'Data Belum Mencukupi')
+        $seededProductIds = array_filter([
+            $gramoxone?->id,
+            $roundup?->id,
+            $prevathon?->id,
+            $phonska?->id,
+            $benihJagung?->id,
+        ]);
+
+        $remainingProducts = Product::whereNotIn('id', $seededProductIds)->get();
+        $customers = Customer::all();
+        $customerList = $customers->isNotEmpty() ? $customers->pluck('id')->toArray() : [];
+        $today = Carbon::today();
+        $invoiceIndex = 1000;
+
+        $saleItemsBatch = [];
+        $summariesBatch = [];
+
+        for ($daysAgo = 7; $daysAgo >= 1; $daysAgo--) {
+            $date = $today->copy()->subDays($daysAgo);
+            // Chunk products into groups of 6 items per transaction
+            $chunks = $remainingProducts->chunk(6);
+
+            foreach ($chunks as $chunkIndex => $chunk) {
+                $invoiceIndex++;
+                $invoiceNo = 'INV-'.$date->format('Ymd').'-'.str_pad($invoiceIndex, 5, '0', STR_PAD_LEFT);
+                $soldAt = $date->copy()->setTime(8 + ($chunkIndex % 9), ($chunkIndex * 7) % 60, 0);
+                $customerId = (! empty($customerList) && ($chunkIndex % 3 === 0))
+                    ? $customerList[$chunkIndex % count($customerList)]
+                    : null;
+
+                $saleSubtotal = 0;
+                $itemsToCreate = [];
+
+                foreach ($chunk as $prod) {
+                    // Realistic daily sales quantity based on product characteristics
+                    $qty = max(1, ($prod->id + $daysAgo) % 4 + 1);
+                    $itemSubtotal = $qty * (float) $prod->selling_price;
+                    $saleSubtotal += $itemSubtotal;
+
+                    $itemsToCreate[] = [
+                        'product_id' => $prod->id,
+                        'quantity' => $qty,
+                        'price' => $prod->selling_price,
+                        'subtotal' => $itemSubtotal,
+                    ];
+
+                    $summariesBatch[] = [
+                        'product_id' => $prod->id,
+                        'sale_date' => $date->toDateString(),
+                        'quantity_sold' => $qty,
+                        'created_at' => $soldAt,
+                        'updated_at' => $soldAt,
+                    ];
+                }
+
+                $saleId = DB::table('sales')->insertGetId([
+                    'invoice_no' => $invoiceNo,
+                    'user_id' => $admin->id,
+                    'customer_id' => $customerId,
+                    'payment_method' => 'cash',
+                    'subtotal' => $saleSubtotal,
+                    'total' => $saleSubtotal,
+                    'status' => 'completed',
+                    'sold_at' => $soldAt,
+                    'created_at' => $soldAt,
+                    'updated_at' => $soldAt,
+                ]);
+
+                foreach ($itemsToCreate as $item) {
+                    $saleItemsBatch[] = [
+                        'sale_id' => $saleId,
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'subtotal' => $item['subtotal'],
+                        'created_at' => $soldAt,
+                        'updated_at' => $soldAt,
+                    ];
+                }
+            }
+        }
+
+        // Insert batch sale items & daily sales summaries
+        foreach (array_chunk($saleItemsBatch, 500) as $chunk) {
+            DB::table('sale_items')->insert($chunk);
+        }
+
+        foreach (array_chunk($summariesBatch, 500) as $chunk) {
+            DailySalesSummary::upsert($chunk, ['product_id', 'sale_date'], ['quantity_sold', 'updated_at']);
+        }
+
+        // 9. Pre-calculate SMA demand forecast for all 369 products
+        app(ForecastService::class)->calculateAll();
     }
 }
